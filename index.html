@@ -1,0 +1,362 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <body>
+    <title>Gene Bar charts</title>
+    <style>
+      .d3-tip {
+      line-height: 1;
+      padding: 12px;
+      background: rgba(245, 245, 245, 0.90) !important;
+      color: #000;
+      border-radius: 2px;
+      font-size: 13px;
+      /*margin-top: 50px;*/
+      }
+       .d3-tipTwo {
+      line-height: 1;
+      padding: 12px;
+      background: rgba(245, 245, 245, 0.90) !important;
+      color: #000;
+      border-radius: 2px;
+      font-size: 13px;
+      margin-top: 350px;
+      }
+       .d3-tipThree {
+      line-height: 1;
+      padding: 12px;
+      background: rgba(245, 245, 245, 0.90) !important;
+      color: #000;
+      border-radius: 2px;
+      font-size: 13px;
+      margin-top: 700px;
+      }
+      .bar rect {
+      fill: steelblue;
+      shape-rendering: crispEdges;
+      }
+      .bar rect:hover{
+      fill: rgba(0,0,0,.8);
+      }
+      .axis path, .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+      }
+      text{
+        font-size: 16px;
+      }
+        #tiptable tr{
+    margin-bottom: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-bottom: 1px solid #777;
+  }
+    #tiptable tr td{
+    background: #fff;
+    margin-bottom: 1px;
+    margin-right: 1px;
+    border-right: 1px solid #ccc;
+  }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="./js/d3.tip.v0.6.3.js"></script>
+    <script>
+    var termsData;
+    var allTermsList = [""];
+    var allTermsListSplit;
+    var termsWithFrequency;
+
+function columnOneBarchart(data) {
+ // console.log(data);
+
+  var minVal = (d3.min(data, function(d) { return d.colOne; }));
+  var maxVal = (d3.max(data, function(d) { return d.colOne; }));
+  console.log(maxVal);
+  var width =  1200;
+  var height = 250;
+
+
+    var x = d3.scale.linear()
+      .domain([0,1])
+      .range([0, width]);
+    
+    var y = d3.scale.linear()
+      .domain([minVal, maxVal])
+      .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .ticks(0)
+
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .ticks(10)
+      .orient("left");
+
+    var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O2</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS2</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS2</b> </td><td style="padding:5px;"> <b>WT-O1</b> </td><td style="padding:5px;"> <b>WT-O2</b> </td></tr>' + d + "</table>";
+    });
+    // put the graph in the "twitterViz" div
+    var svg = d3.select("#column1").append("svg")
+      .attr("width", width)
+      .attr("height", height + 90)
+      .append("g")
+      .attr("transform", "translate(" + 70 + "," + 50 + ")");
+var attrX = 1;
+    svg.call(tip);
+    // set up the bars
+    var bar = svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("x", function(d,i){
+        return attrX++;
+      })
+      .attr("width", 2)
+      .attr("y", function(d){
+        return y(d.colOne);
+      })
+      .attr("height", function(d) { return height - y(d.colOne); })
+      .on('mouseover', function(d){
+        var tipContent = "";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + "</td></tr>";
+
+          tip.show(tipContent, this);
+      })
+      .on('mouseout', tip.hide)
+    // add the x axis and x-label
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")  
+      .attr("x", "-50")
+      .attr("transform", "rotate(-90)");
+    svg.append("text")
+      .attr("class", "xlabel")
+      .attr("text-anchor", "middle")
+      .attr("x", width / 2)
+      .attr("y", 600)
+      .text("");
+    // add the y axis and y-label
+    svg.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,0)")
+      .call(yAxis);
+    svg.append("text")
+      .attr("class", "ylabel")
+      .attr("y", 10) // x and y switched due to rotation
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("transform", "rotate(-90)")
+      .style("text-anchor", "middle")
+      .text("Value");
+}
+
+function columnThreeBarchart(data) {
+ // console.log(data);
+
+  var minVal = (d3.min(data, function(d) { return d.colThree; }));
+  var maxVal = (d3.max(data, function(d) { return d.colThree; }));
+  console.log(maxVal);
+  var width =  1200;
+  var height = 250;
+
+
+    var x = d3.scale.linear()
+      .domain([0,1])
+      .range([0, width]);
+    
+    var y = d3.scale.linear()
+      .domain([minVal, maxVal])
+      .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .ticks(0)
+
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .ticks(10)
+      .orient("left");
+
+    var tip = d3.tip()
+      .attr('class', 'd3-tipTwo')
+      .direction('e')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td></tr>' + d + "</table>";
+    });
+    // put the graph in the "twitterViz" div
+    var svg = d3.select("#column3").append("svg")
+      .attr("width", width)
+      .attr("height", height+90)
+      .append("g")
+      .attr("transform", "translate(" + 70 + "," + 50 + ")");
+var attrX = 1;
+    svg.call(tip);
+    // set up the bars
+    var bar = svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("x", function(d,i){
+        return attrX++;
+      })
+      .attr("width", 2)
+      .attr("y", function(d){
+        return y(d.colThree);
+      })
+      .attr("height", function(d) { return height - y(d.colThree); })
+      .on('mouseover', function(d){
+        var tipContent = "";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + "</td></tr>";
+
+        tip.show(tipContent, this);
+      })
+      .on('mouseout', tip.hide)
+    // add the x axis and x-label
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")  
+      .attr("x", "-50")
+      .attr("transform", "rotate(-90)");
+    svg.append("text")
+      .attr("class", "xlabel")
+      .attr("text-anchor", "middle")
+      .attr("x", width / 2)
+      .attr("y", 600)
+      .text("");
+    // add the y axis and y-label
+    svg.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,0)")
+      .call(yAxis);
+    svg.append("text")
+      .attr("class", "ylabel")
+      .attr("y", 10) // x and y switched due to rotation
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("transform", "rotate(-90)")
+      .style("text-anchor", "middle")
+      .text("Value");
+}
+
+function columnFiveBarchart(data) {
+ // console.log(data);
+
+  var minVal = (d3.min(data, function(d) { return d.colFive; }));
+  var maxVal = (d3.max(data, function(d) { return d.colFive; }));
+  console.log(maxVal);
+  var width =  1200;
+  var height = 250;
+
+
+    var x = d3.scale.linear()
+      .domain([0,1])
+      .range([0, width]);
+    
+    var y = d3.scale.linear()
+      .domain([minVal, maxVal])
+      .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .ticks(0)
+
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .ticks(10)
+      .orient("left");
+
+    var tip = d3.tip()
+      .attr('class', 'd3-tipThree')
+      .direction('e')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td></tr>' + d + "</table>";
+    });
+    // put the graph in the "twitterViz" div
+    var svg = d3.select("#column3").append("svg")
+      .attr("width", width)
+      .attr("height", height+90)
+      .append("g")
+      .attr("transform", "translate(" + 70 + "," + 50 + ")");
+var attrX = 1;
+    svg.call(tip);
+    // set up the bars
+    var bar = svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("x", function(d,i){
+        return attrX++;
+      })
+      .attr("width", 2)
+      .attr("y", function(d){
+        return y(d.colFive);
+      })
+      .attr("height", function(d) { return height - y(d.colFive); })
+      .on('mouseover', function(d){
+        var tipContent = "";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + "</td></tr>";
+
+        tip.show(tipContent, this);
+      })
+      .on('mouseout', tip.hide)
+    // add the x axis and x-label
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")  
+      .attr("x", "-50")
+      .attr("transform", "rotate(-90)");
+    svg.append("text")
+      .attr("class", "xlabel")
+      .attr("text-anchor", "middle")
+      .attr("x", width / 2)
+      .attr("y", 600)
+      .text("");
+    // add the y axis and y-label
+    svg.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,0)")
+      .call(yAxis);
+    svg.append("text")
+      .attr("class", "ylabel")
+      .attr("y", 10) // x and y switched due to rotation
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("transform", "rotate(-90)")
+      .style("text-anchor", "middle")
+      .text("Value");
+}
+// Read in .csv data and make graph
+d3.csv("data.csv", function(error, data) {
+ 
+  // var parseDate = d3.time.format("%Y-%m-%d");;
+  // var format = d3.time.format("%Y-%m-%d");
+         data.forEach(function(d) {
+                   d.colOne = +d["P53KO-O1"];
+                   d.colThree = +d["p53KO-O-CAS1"];
+                   d.colFive = +d["p53KO-O-RAS1"];
+       });
+  console.log(data);
+            
+             columnOneBarchart(data);
+             columnThreeBarchart(data);
+             columnFiveBarchart(data);
+   
+}); 
+    </script>
+    <div id="column1" class="graph"></div>
+    <div id="column3" class="graph"></div>
+
+  </body>
+</html>
