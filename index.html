@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
   <body>
-    <title>Gene Bar charts</title>
+    <title>Cancer Bar charts</title>
     <style>
       .d3-tip {
       line-height: 1;
@@ -10,7 +10,8 @@
       color: #000;
       border-radius: 2px;
       font-size: 13px;
-      /*margin-top: 50px;*/
+      margin-top: 0px;
+      margin-left: -100px;
       }
        .d3-tipTwo {
       line-height: 1;
@@ -19,6 +20,7 @@
       color: #000;
       border-radius: 2px;
       font-size: 13px;
+      margin-left: -100px;
       margin-top: 350px;
       }
        .d3-tipThree {
@@ -28,6 +30,7 @@
       color: #000;
       border-radius: 2px;
       font-size: 13px;
+      margin-left: -100px;
       margin-top: 700px;
       }
       .bar rect {
@@ -57,6 +60,16 @@
     margin-right: 1px;
     border-right: 1px solid #ccc;
   }
+  h3{
+    text-align: center;
+    width: 1200px;
+  }
+    .d3-tooltip{
+    background: #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    border: .6px solid black;
+  }
     </style>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="./js/d3.tip.v0.6.3.js"></script>
@@ -65,6 +78,34 @@
     var allTermsList = [""];
     var allTermsListSplit;
     var termsWithFrequency;
+
+        var lineColor = d3.scale.linear()
+                      .domain([0,100])
+                      .range(['#00f', '#f00'])
+
+        var tip1 = d3.tip()
+      .attr('class', 'd3-tip d3-tooltip')
+      .direction('e')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
+    });
+
+          var tip2 = d3.tip()
+      .attr('class', 'd3-tipTwo d3-tooltip')
+      .direction('e')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
+    });
+
+          var tip3 = d3.tip()
+      .attr('class', 'd3-tipThree d3-tooltip')
+      .direction('e')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
+    });
 
 function columnOneBarchart(data) {
  // console.log(data);
@@ -75,6 +116,7 @@ function columnOneBarchart(data) {
   var width =  1200;
   var height = 250;
 
+lineColor.domain([minVal, maxVal]);
 
     var x = d3.scale.linear()
       .domain([0,1])
@@ -94,20 +136,15 @@ function columnOneBarchart(data) {
       .ticks(10)
       .orient("left");
 
-    var tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .offset([0, 20])
-      .html(function(d) {
-         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O2</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS2</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS2</b> </td><td style="padding:5px;"> <b>WT-O1</b> </td><td style="padding:5px;"> <b>WT-O2</b> </td></tr>' + d + "</table>";
-    });
+
     // put the graph in the "twitterViz" div
     var svg = d3.select("#column1").append("svg")
       .attr("width", width)
-      .attr("height", height + 90)
+      .attr("height", height + 30)
       .append("g")
-      .attr("transform", "translate(" + 70 + "," + 50 + ")");
+      .attr("transform", "translate(" + 70 + "," + 10 + ")");
 var attrX = 1;
-    svg.call(tip);
+    svg.call(tip1);
     // set up the bars
     var bar = svg.selectAll(".bar")
       .data(data)
@@ -120,13 +157,22 @@ var attrX = 1;
         return y(d.colOne);
       })
       .attr("height", function(d) { return height - y(d.colOne); })
+      .attr("fill", function(d){
+                    return lineColor(d.colOne);
+                })
       .on('mouseover', function(d){
         var tipContent = "";
-        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + "</td></tr>";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.colOne + '</td><td align="left" style="padding:5px;">' +d.colThree  + '</td><td align="left" style="padding:5px;">' +d.colFive  + "</td></tr>";
 
-          tip.show(tipContent, this);
+          tip1.show(tipContent, this);
+          tip2.show(tipContent, this);
+          tip3.show(tipContent, this);
       })
-      .on('mouseout', tip.hide)
+      .on('mouseout', function(d){
+        tip1.hide();
+        tip2.hide();
+        tip3.hide();
+      })
     // add the x axis and x-label
     svg.append("g")
       .attr("class", "x axis")
@@ -164,7 +210,7 @@ function columnThreeBarchart(data) {
   console.log(maxVal);
   var width =  1200;
   var height = 250;
-
+lineColor.domain([minVal, maxVal]);
 
     var x = d3.scale.linear()
       .domain([0,1])
@@ -184,21 +230,15 @@ function columnThreeBarchart(data) {
       .ticks(10)
       .orient("left");
 
-    var tip = d3.tip()
-      .attr('class', 'd3-tipTwo')
-      .direction('e')
-      .offset([0, 20])
-      .html(function(d) {
-         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td></tr>' + d + "</table>";
-    });
+   
     // put the graph in the "twitterViz" div
     var svg = d3.select("#column3").append("svg")
       .attr("width", width)
-      .attr("height", height+90)
+      .attr("height", height+30)
       .append("g")
-      .attr("transform", "translate(" + 70 + "," + 50 + ")");
+      .attr("transform", "translate(" + 70 + "," + 10 + ")");
 var attrX = 1;
-    svg.call(tip);
+    svg.call(tip2);
     // set up the bars
     var bar = svg.selectAll(".bar")
       .data(data)
@@ -211,13 +251,22 @@ var attrX = 1;
         return y(d.colThree);
       })
       .attr("height", function(d) { return height - y(d.colThree); })
+        .attr("fill", function(d){
+                    return lineColor(d.colThree);
+                })
       .on('mouseover', function(d){
         var tipContent = "";
-        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + "</td></tr>";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.colOne + '</td><td align="left" style="padding:5px;">' +d.colThree  + '</td><td align="left" style="padding:5px;">' +d.colFive  + "</td></tr>";
 
-        tip.show(tipContent, this);
+          tip1.show(tipContent, this);
+          tip2.show(tipContent, this);
+          tip3.show(tipContent, this);
       })
-      .on('mouseout', tip.hide)
+      .on('mouseout', function(d){
+        tip1.hide();
+        tip2.hide();
+        tip3.hide();
+      })
     // add the x axis and x-label
     svg.append("g")
       .attr("class", "x axis")
@@ -255,7 +304,7 @@ function columnFiveBarchart(data) {
   console.log(maxVal);
   var width =  1200;
   var height = 250;
-
+lineColor.domain([minVal, maxVal]);
 
     var x = d3.scale.linear()
       .domain([0,1])
@@ -275,21 +324,15 @@ function columnFiveBarchart(data) {
       .ticks(10)
       .orient("left");
 
-    var tip = d3.tip()
-      .attr('class', 'd3-tipThree')
-      .direction('e')
-      .offset([0, 20])
-      .html(function(d) {
-         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td></tr>' + d + "</table>";
-    });
+  
     // put the graph in the "twitterViz" div
-    var svg = d3.select("#column3").append("svg")
+    var svg = d3.select("#column5").append("svg")
       .attr("width", width)
-      .attr("height", height+90)
+      .attr("height", height+30)
       .append("g")
-      .attr("transform", "translate(" + 70 + "," + 50 + ")");
+      .attr("transform", "translate(" + 70 + "," + 10 + ")");
 var attrX = 1;
-    svg.call(tip);
+    svg.call(tip3);
     // set up the bars
     var bar = svg.selectAll(".bar")
       .data(data)
@@ -302,13 +345,22 @@ var attrX = 1;
         return y(d.colFive);
       })
       .attr("height", function(d) { return height - y(d.colFive); })
+      .attr("fill", function(d){
+                    return lineColor(d.colFive);
+                })
       .on('mouseover', function(d){
         var tipContent = "";
-        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + "</td></tr>";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.colOne + '</td><td align="left" style="padding:5px;">' +d.colThree  + '</td><td align="left" style="padding:5px;">' +d.colFive  + "</td></tr>";
 
-        tip.show(tipContent, this);
+          tip1.show(tipContent, this);
+          tip2.show(tipContent, this);
+          tip3.show(tipContent, this);
       })
-      .on('mouseout', tip.hide)
+      .on('mouseout', function(d){
+        tip1.hide();
+        tip2.hide();
+        tip3.hide();
+      })
     // add the x axis and x-label
     svg.append("g")
       .attr("class", "x axis")
@@ -355,8 +407,15 @@ d3.csv("data.csv", function(error, data) {
    
 }); 
     </script>
-    <div id="column1" class="graph"></div>
-    <div id="column3" class="graph"></div>
+    <div id="column1" class="graph">
+      <h3>P53KO-O1</h3>
+    </div>
+    <div id="column3" class="graph">
+      <h3>p53KO-O-CAS1</h3>
+    </div>
+     <div id="column5" class="graph">
+        <h3>p53KO-O-RAS1</h3>
+     </div>
 
   </body>
 </html>
