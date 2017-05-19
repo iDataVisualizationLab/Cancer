@@ -141,6 +141,14 @@
          return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
     });
 
+          var tip5 = d3.tip()
+      .attr('class', 'd3-tipFour d3-tooltip')
+      .direction('e')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
+    });
+
 
 function chartOne(data) {
  // console.log(data);
