@@ -237,28 +237,28 @@ d3.csv("data/mgi-id-to-uniprot-id.csv", function(error, idMappingData) {
                     return buttonColor;
             })
             .style("fill-opacity", 0.3)
-            .on('mouseover', function (d2) {
-                svg2.selectAll(".buttonRect")
-                    .style("fill", function (d4) {
-                        if (d4 == d2)
-                            return colorHighlight;
-                        else if (list[d4].length > 2)
-                            return "#888";
-                        else
-                            return buttonColor;
-                    });
-            })
-            .on('mouseout', function (d2) {
-                svg2.selectAll(".buttonRect")
-                    .style("fill", function (d4) {
-                        if (d4 == "TGF-beta__IL-17" || d4 == "EGCG__MMP-13")
-                            return "#f88";
-                        else if (list[d4].length > 2)
-                            return "#888";
-                        else
-                            return buttonColor;
-                    });
-            })
+            // .on('mouseover', function (d2) {
+            //     svg2.selectAll(".buttonRect")
+            //         .style("fill", function (d4) {
+            //             if (d4 == d2)
+            //                 return colorHighlight;
+            //             else if (list[d4].length > 2)
+            //                 return "#888";
+            //             else
+            //                 return buttonColor;
+            //         });
+            // })
+            // .on('mouseout', function (d2) {
+            //     svg2.selectAll(".buttonRect")
+            //         .style("fill", function (d4) {
+            //             if (d4 == "TGF-beta__IL-17" || d4 == "EGCG__MMP-13")
+            //                 return "#f88";
+            //             else if (list[d4].length > 2)
+            //                 return "#888";
+            //             else
+            //                 return buttonColor;
+            //         });
+            // })
             .on('click', function (d2) {
                 svg2.selectAll(".buttonRect")
                     .style("stroke-width", function (d4) {
@@ -481,30 +481,30 @@ function secondLayout(selected, isSource){   // isSource: is the selected node a
       .style("stroke-width",function(l){
          return 5+l.list.length;
       })
-      .on('mouseover', function(d) {
-        if (force2.alpha()<=0.06){
-          var a = {};
-          for (var i=0;i<d.list.length;i++){
-            a[d.list[i].name] = d.list[i];
-          }
-
-          for (var i=0;i<tlinks.length;i++){
-            if (a[tlinks[i].ref.name])
-              tlinks[i].mouseover = true;
-            else
-              tlinks[i].mouseover = false;
-          }
-
-          showTip(d);
-          updateLinks();
-
-          force2.stop()
-        }
-      })
-      .on('mouseout', function(d) {
-        tip.hide(d);
-        resetLinks();
-      });
+      // .on('mouseover', function(d) {
+      //   if (force2.alpha()<=0.06){
+      //     var a = {};
+      //     for (var i=0;i<d.list.length;i++){
+      //       a[d.list[i].name] = d.list[i];
+      //     }
+      //
+      //     for (var i=0;i<tlinks.length;i++){
+      //       if (a[tlinks[i].ref.name])
+      //         tlinks[i].mouseover = true;
+      //       else
+      //         tlinks[i].mouseover = false;
+      //     }
+      //
+      //     showTip(d);
+      //     updateLinks();
+      //
+      //     force2.stop()
+      //   }
+      // })
+      // .on('mouseout', function(d) {
+      //   tip.hide(d);
+      //   resetLinks();
+      // });
 
     nodes2.forEach(function(d){
       var curNode = d;
@@ -554,25 +554,26 @@ function secondLayout(selected, isSource){   // isSource: is the selected node a
         if (d.isExpanded!=true)
           click2(d); 
       })
-      .on('mouseover', function(d) {
-        if (force2.alpha()<=0.06){
-
-            // debugger;
-          showTip(d);
-          if (!!mutiPlanes) {
-              mutiPlanes.highlightNode(d);
-          }
-
-          force2.stop()
-        }
-      })
-      .on('mouseout', function(d) {
-        tip.hide();
-
-          if (!!mutiPlanes) {
-              mutiPlanes.clearHighlightNode(d);
-          }
-      });
+      // .on('mouseover', function(d) {
+      //   if (force2.alpha()<=0.06){
+      //
+      //       // debugger;
+      //     showTip(d);
+      //     if (!!mutiPlanes) {
+      //         mutiPlanes.highlightNode(d);
+      //     }
+      //
+      //     force2.stop()
+      //   }
+      // })
+      // .on('mouseout', function(d) {
+      //   tip.hide();
+      //
+      //     if (!!mutiPlanes) {
+      //         mutiPlanes.clearHighlightNode(d);
+      //     }
+      // })
+      ;
 
       force2
           .nodes(nodes2)
