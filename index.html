@@ -102,10 +102,21 @@ th, td { display: block;
   padding: 5px;
 
 }
+.disease {
+  fill: rgb(198, 226, 255);
+}
+
+.other {
+  fill: rgb(50,50,50);
+}
+
+.wounds {
+  fill: rgb(252,112,147);
+}
 
     </style>
     <script src="js/jquery.2.1.1.min.js"></script>
-
+    <script src="./js/script.js"></script>
     <script src="./js/d3.v4.js"></script>
     <script src="./js/d3.v4.tip.js"></script>
     <script>
@@ -751,6 +762,92 @@ function updateChartsReset(){
              chartFour(globalData);
 
 }
+
+function roseChart(data){
+var rose = Chart.rose(),
+        height = 600,
+        format = d3.timeParse('%m/%Y'),
+        causes = ['disease', 'wounds', 'other'],
+        labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+      // Load the JSON data:
+      d3.json('data.json', function( data ) {
+        // Data from: http://ocp.hul.harvard.edu/dl/contagion/010164675
+
+        // Format the date and rework the data:
+        var scalar;
+        data.forEach( function(d) { 
+          d.date = format(d.date);
+          d.label = labels[d.date.getMonth()];
+          
+          // Calculate the average annual mortality, as done by Nightingale:
+          // http://understandinguncertainty.org/node/214 
+          scalar = 1000*12 / d.army_size;
+          d.disease = d.disease * scalar;
+          d.wounds  = d.wounds  * scalar;
+          d.other   = d.other   * scalar;
+        } );
+console.log(data);
+        // Get the maximum value:
+        var maxVal = d3.max( data, function(d) {
+          return d3.max( [d.disease, d.wounds, d.other] );
+        });
+
+        // Where the maximum value gives us the maximum radius:
+        var maxRadius = Math.sqrt(maxVal*12 / Math.PI);
+
+        // Divide the dataset in two:
+        var dataset2 = data.slice(12,24),
+          dataset1 = data.slice(0,12);
+        
+        // Append a new figure to the DOM:
+        figure = d3.select( 'body' )
+          .append( 'figure' );
+
+        // Get the figure width:
+        width = parseInt( figure.style( 'width' ), 10 );
+
+        // Update the chart generator settings:
+        rose.legend( causes )
+          .width( width )
+          .height( height )
+          .delay( 0 )
+          .duration( 500 )
+          .domain( [0, maxRadius] )
+          .angle( function(d) { return d.date.getMonth(); } )
+          .area( function(d, i) { return [d.disease, d.wounds, d.other]; } );             
+
+        // Bind the data and generate a new chart:
+        figure.datum( dataset1 )
+          .attr('class', 'chart figure1')
+          .call( rose );  
+
+        // Append a new figure to the DOM:
+        figure = d3.select( 'body' )
+          .append( 'figure' );
+
+        // Get the figure width:
+        width = parseInt( figure.style( 'width' ), 10 );
+
+        // Update the chart generator settings:
+        rose.width( width )
+          .delay( 3000 );
+
+        // Bind the second dataset and generate a new chart:
+        // Append a caption:
+
+
+        // Create a legend:
+        // Chart.legend( causes );
+
+        // Create a slider:
+        // Chart.slider( 0, data.length, 1 ); // minVal, maxVal, step
+        
+      }); 
+
+}
+
 // Read in .csv data and make graph
 d3.csv("data.csv", function(error, data) {
  
@@ -779,6 +876,7 @@ d3.csv("data.csv", function(error, data) {
              chartThree(data);
              chartFour(data);
              globalData = data;
+             roseChart(data);
    
 }); 
     </script>
@@ -798,6 +896,7 @@ d3.csv("data.csv", function(error, data) {
          <div id="chart4" class="graph">
             <h3>WT</h3>
          </div>
+         <div id="roseChart"></div>
     </div>
     <div class="network" id="container">
     </div>
