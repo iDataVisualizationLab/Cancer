@@ -6,7 +6,6 @@
       .d3-tip {
       line-height: 1;
       padding: 12px;
-      background: rgba(245, 245, 245, 0.90) !important;
       color: #000;
       border-radius: 2px;
       font-size: 13px;
@@ -16,7 +15,6 @@
        .d3-tipTwo {
       line-height: 1;
       padding: 12px;
-      background: rgba(245, 245, 245, 0.90) !important;
       color: #000;
       border-radius: 2px;
       font-size: 13px;
@@ -26,7 +24,6 @@
        .d3-tipThree {
       line-height: 1;
       padding: 12px;
-      background: rgba(245, 245, 245, 0.90) !important;
       color: #000;
       border-radius: 2px;
       font-size: 13px;
@@ -36,7 +33,6 @@
       .d3-tipFour {
       line-height: 1;
       padding: 12px;
-      background: rgba(245, 245, 245, 0.90) !important;
       color: #000;
       border-radius: 2px;
       font-size: 13px;
@@ -59,16 +55,16 @@
         font-size: 16px;
       }
         #tiptable tr{
-    margin-bottom: 1px;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-bottom: 1px solid #777;
+    /*margin-bottom: 1px;*/
+    /*padding-left: 5px;*/
+    /*padding-right: 5px;*/
+    /*border-bottom: 1px solid #777;*/
   }
     #tiptable tr td{
     background: #fff;
-    margin-bottom: 1px;
-    margin-right: 1px;
-    border-right: 1px solid #ccc;
+    /*margin-bottom: 1px;*/
+    /*margin-right: 1px;*/
+    /*border-right: 1px solid #ccc;*/
   }
   h3{
     text-align: center;
@@ -78,7 +74,7 @@
     font-size: 16px;
   }
     .d3-tooltip{
-    background: #777;
+    background: #ccc;
     border-radius: 5px;
     padding: 8px;
     border: .6px solid black;
@@ -92,6 +88,24 @@
     border: 2px solid #777;
     margin-bottom: 10px;
   }
+
+table { border-collapse: collapse; 
+background: #aaa;
+}
+tr { display: block; float: left; 
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  }
+th, td { display: block; 
+  text-align: left;
+  /*border: 1px solid black; */
+  background: #fff; margin-bottom: 1px;
+  padding: 5px;
+
+}
+
     </style>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="./js/d3.tip.v0.6.3.js"></script>
@@ -114,7 +128,7 @@
       .direction('e')
       .offset([0, 20])
       .html(function(d) {
-         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
+         return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-RAS1</b> </th></tr>' + d + "</table>";
     });
 
           var tip2 = d3.tip()
@@ -231,7 +245,7 @@ var attrX = 1;
                 })
       .on('mouseover', function(d){
         var tipContent = "";
-        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.avgP53 + '</td><td align="left" style="padding:5px;">' +d.avgCAS  + '</td><td align="left" style="padding:5px;">' +d.avgRAS  + "</td></tr>";
+        tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol +'</td><td>' +d.length + '</td><td>' + d.avgP53 + '</td><td>' +d.avgCAS  + '</td><td>' +d.avgRAS  + "</td></tr>";
 
           tip1.show(tipContent, this);
           // tip2.show(tipContent, this);
@@ -246,6 +260,10 @@ var attrX = 1;
           .attr("fill", "#ff8707");
           
           selectId = "#avgRAS" + d.id;
+          d3.select(selectId)
+          .attr("fill", "#ff8707");
+
+          selectId = "#avgWT" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
       })
@@ -269,6 +287,11 @@ var attrX = 1;
           d3.select(selectId)
           .attr("fill", function(d){
             return lineColor(d.avgRAS);
+          })
+          selectId = "#avgWT" + d.id;
+          d3.select(selectId)
+          .attr("fill", function(d){
+            return lineColor(d.avgWT);
           })
       })
     // add the x axis and x-label
@@ -371,6 +394,10 @@ var attrX = 1;
           selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
+
+          selectId = "#avgWT" + d.id;
+          d3.select(selectId)
+          .attr("fill", "#ff8707");
       })
       .on('mouseout', function(d){
         // tip1.hide();
@@ -392,6 +419,11 @@ var attrX = 1;
           d3.select(selectId)
           .attr("fill", function(d){
             return lineColor(d.avgRAS);
+          })
+          selectId = "#avgWT" + d.id;
+          d3.select(selectId)
+          .attr("fill", function(d){
+            return lineColor(d.avgWT);
           })
       })
     // add the x axis and x-label
@@ -495,6 +527,10 @@ var attrX = 1;
           selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
+
+          selectId = "#avgWT" + d.id;
+          d3.select(selectId)
+          .attr("fill", "#ff8707");
       })
       .on('mouseout', function(d){
         // tip1.hide();
@@ -516,6 +552,11 @@ var attrX = 1;
           d3.select(selectId)
           .attr("fill", function(d){
             return lineColor(d.avgRAS);
+          })
+          selectId = "#avgWT" + d.id;
+          d3.select(selectId)
+          .attr("fill", function(d){
+            return lineColor(d.avgWT);
           })
       })
     // add the x axis and x-label
