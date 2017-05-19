@@ -121,7 +121,8 @@ d3.tsv("data/uniprot-proteins.tsv", function(error, data_) {
 
 d3.csv("data/mgi-id-to-uniprot-id.csv", function(error, idMappingData) {
 
-    d3.json("data/cardsWithContextData.json", function (error, data_) {
+    // d3.json("data/cardsWithContextData.json", function (error, data_) {
+    d3.json("data/my-mgi-cart-context.json", function (error, data_) {
         data3 = data_;
         var linkNames = {};
         data3.forEach(function (d, index) {
