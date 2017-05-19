@@ -104,6 +104,8 @@ th, td { display: block;
 }
 
     </style>
+    <script src="js/jquery.2.1.1.min.js"></script>
+
     <script src="./js/d3.v4.js"></script>
     <script src="./js/d3.v4.tip.js"></script>
     <script>
@@ -797,8 +799,45 @@ d3.csv("data.csv", function(error, data) {
             <h3>WT</h3>
          </div>
     </div>
-    <div class="network">
+    <div class="network" id="container">
       Network should be here. 
     </div>
+
+
+    <div id="multi-plane-representation" style="margin-left: 620px;">
+
+    </div>
+
+    <script src="js/lodash.js"></script>
+
+    <script src="js/fisheye.js"></script>
+
+    <script src="scripts/util.js"></script>
+    <script src="scripts/genomics.js"></script>
+    <script src="scripts/tooltip.js"></script>
+    <script src="scripts/stacking.js"></script>
+    <script src="scripts/TimeArcsViz.js"></script>
+    <script src="scripts/TimeArcsPublications.js"></script>
+    <script src="scripts/matrix.js"></script>
+    <script src="scripts/sliderRelationship.js"></script>
+    <script src="scripts/streamGraph.js"></script>
+
+
+    <script src="scripts/forceDirected.js"></script>
+    <script src="scripts/cluster.network.js"></script>
+
+
+    <script src="scripts/jLouvain.js"></script>
+    <script src="scripts/context.networks.js"></script>
+
+
+    <script src="scripts/main.js"></script>
+
+
+    <script type='text/javascript' src="js/jquery-ui.1.11.0.min.js"> </script>
+    <link href="styles/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+    <script src="scripts/searchBox.js"></script>
+
   </body>
 </html>
