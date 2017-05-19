@@ -1,0 +1,5 @@
+1. 4 charts by average each 2. 
+2. Box around each chart. 
+3. Option for ordering. 
+4. Height should be 800 including all. 
+5. Width should be 600.
