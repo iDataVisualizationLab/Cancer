@@ -21,7 +21,7 @@
       border-radius: 2px;
       font-size: 13px;
       margin-left: -100px;
-      margin-top: 350px;
+      margin-top: 130px;
       }
        .d3-tipThree {
       line-height: 1;
@@ -31,7 +31,17 @@
       border-radius: 2px;
       font-size: 13px;
       margin-left: -100px;
-      margin-top: 700px;
+      margin-top: 300px;
+      }
+      .d3-tipFour {
+      line-height: 1;
+      padding: 12px;
+      background: rgba(245, 245, 245, 0.90) !important;
+      color: #000;
+      border-radius: 2px;
+      font-size: 13px;
+      margin-left: -100px;
+      margin-top: 500px;
       }
       .bar rect {
       fill: steelblue;
@@ -68,7 +78,7 @@
     font-size: 16px;
   }
     .d3-tooltip{
-    background: #ccc;
+    background: #777;
     border-radius: 5px;
     padding: 8px;
     border: .6px solid black;
@@ -78,7 +88,7 @@
     float: left;
     margin-right: 20px;
   }
-  #column1, #column3, #column5{
+  #column1, #column3, #column5, #chart4{
     border: 2px solid #777;
     margin-bottom: 10px;
   }
@@ -90,9 +100,9 @@
     var allTermsList = [""];
     var allTermsListSplit;
     var termsWithFrequency;
-    var colOneVal;
-    var colThreeVal;
-    var colFiveVal;
+    var avgP53Val;
+    var avgCASVal;
+    var avgRASVal;
     var finalHighVal=0;
 
         var lineColor = d3.scale.linear()
@@ -123,28 +133,46 @@
          return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
     });
 
-function columnOneBarchart(data) {
+          var tip4 = d3.tip()
+      .attr('class', 'd3-tipFour d3-tooltip')
+      .direction('e')
+      .offset([0, 20])
+      .html(function(d) {
+         return '<table id="tiptable" cellpadding="1" cellspacing="1" align="center">' + '<tr align="center" style="padding:5px;"><td style="padding:5px;"> <b>chr</td><td style="padding:5px; width:25px;"> <b>start</td><td style="padding:5px;"> <b>end</b> </td><td style="padding:5px;"> <b>strand</b> </td><td style="padding:5px;"> <b>symbol</b> </td><td style="padding:5px;"> <b>length</b> </td><td style="padding:5px;"> <b>P53KO-O1</b> </td><td style="padding:5px;"> <b>p53KO-O-CAS1</b> </td><td style="padding:5px;"> <b>p53KO-O-RAS1</b> </td></tr>' + d + "</table>";
+    });
+
+
+function chartOne(data) {
  // console.log(data);
  var allData =data;
-  var minVal = (d3.min(data, function(d) { return d.colOne; }));
-  var maxVal = (d3.max(data, function(d) { return d.colOne; }));
-  console.log(maxVal);
-  var width =  600;
-  var height = 150;
- colOneVal = d3.extent(data.map(function (d) {
-        return (d.colOne);
-   }))
-  colThreeVal = d3.extent(data.map(function (d) {
-        return (d.colFive);
-   }))
-  if(colThreeVal[1]>colOneVal)
-    finalHighVal = colThreeVal[1];
+  var minVal = (d3.min(data, function(d) { return d.avgP53; }));
+  var maxVal = (d3.max(data, function(d) { return d.avgP53; }));
 
- colFiveVal = d3.extent(data.map(function (d) {
-        return (d.colFive);
+  var width =  600;
+  var height = 130;
+ avgP53Val = d3.extent(data.map(function (d) {
+        return (d.avgP53);
    }))
- if(colFiveVal[1]>finalHighVal)
-    finalHighVal = colFiveVal[1];
+  avgCASVal = d3.extent(data.map(function (d) {
+        return (d.avgRAS);
+   }))
+  if(avgCASVal[1]>avgP53Val)
+    finalHighVal = avgCASVal[1];
+
+ avgRASVal = d3.extent(data.map(function (d) {
+        return (d.avgRAS);
+   }))
+ if(avgRASVal[1]>finalHighVal)
+    finalHighVal = avgRASVal[1];
+
+ colWTVal = d3.extent(data.map(function (d) {
+        return (d.avgWT);
+   }))
+ if(colWTVal[1]>finalHighVal)
+    finalHighVal = colWTVal[1];
+
+  console.log(finalHighVal);
+
 
 lineColor.domain([0, finalHighVal]);
 
@@ -180,36 +208,36 @@ var attrX = 1;
       .data(data)
       .enter().append("rect")
       .attr("id", function(d, i){
-          return "colOne"+(i+1);
+          return "avgP53"+(i+1);
       })
       .attr("x", function(d,i){
         return attrX+(i/2);
       })
       .attr("width", 2)
       .attr("y", function(d){
-        return y(d.colOne);
+        return y(d.avgP53);
       })
-      .attr("height", function(d) { return height - y(d.colOne); })
+      .attr("height", function(d) { return height - y(d.avgP53); })
       .attr("fill", function(d){
-                    return lineColor(d.colOne);
+                    return lineColor(d.avgP53);
                 })
       .on('mouseover', function(d){
         var tipContent = "";
-        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.colOne + '</td><td align="left" style="padding:5px;">' +d.colThree  + '</td><td align="left" style="padding:5px;">' +d.colFive  + "</td></tr>";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.avgP53 + '</td><td align="left" style="padding:5px;">' +d.avgCAS  + '</td><td align="left" style="padding:5px;">' +d.avgRAS  + "</td></tr>";
 
           tip1.show(tipContent, this);
           // tip2.show(tipContent, this);
           // tip3.show(tipContent, this);
-          console.log(d)
-          selectId = "#colOne" + d.id;
+          // console.log(d)
+          selectId = "#avgP53" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
  
-          selectId = "#colThree" + d.id;
+          selectId = "#avgCAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
           
-          selectId = "#colFive" + d.id;
+          selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
       })
@@ -217,22 +245,22 @@ var attrX = 1;
         tip1.hide();
         // tip2.hide();
         // tip3.hide();
-       selectId = "#colOne" + d.id;
+       selectId = "#avgP53" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colOne);
+            return lineColor(d.avgP53);
           })
 
-          selectId = "#colThree" + d.id;
+          selectId = "#avgCAS" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colThree);
+            return lineColor(d.avgCAS);
           })
 
-          selectId = "#colFive" + d.id;
+          selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colFive);
+            return lineColor(d.avgRAS);
           })
       })
     // add the x axis and x-label
@@ -264,12 +292,12 @@ var attrX = 1;
       .text("Value");
 }
 
-function columnThreeBarchart(data) {
+function chartTwo(data) {
  // console.log(data);
 
  
   var width =  600;
-  var height = 150;
+  var height = 130;
 lineColor.domain([0, finalHighVal]);
 
     var x = d3.scale.linear()
@@ -304,35 +332,35 @@ var attrX = 1;
       .data(data)
       .enter().append("rect")
       .attr("id", function(d, i){
-          return "colThree"+(i+1);
+          return "avgCAS"+(i+1);
       })
       .attr("x", function(d,i){
         return attrX+ (i/2);
       })
       .attr("width", 2)
       .attr("y", function(d){
-        return y(d.colThree);
+        return y(d.avgCAS);
       })
-      .attr("height", function(d) { return height - y(d.colThree); })
+      .attr("height", function(d) { return height - y(d.avgCAS); })
         .attr("fill", function(d){
-                    return lineColor(d.colThree);
+                    return lineColor(d.avgCAS);
                 })
       .on('mouseover', function(d){
         var tipContent = "";
-        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.colOne + '</td><td align="left" style="padding:5px;">' +d.colThree  + '</td><td align="left" style="padding:5px;">' +d.colFive  + "</td></tr>";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.avgP53 + '</td><td align="left" style="padding:5px;">' +d.avgCAS  + '</td><td align="left" style="padding:5px;">' +d.avgRAS  + "</td></tr>";
           // tip1.show(tipContent, this);
           tip2.show(tipContent, this);
           // tip3.show(tipContent, this);
-          console.log(d)
-          selectId = "#colOne" + d.id;
+          // console.log(d)
+          selectId = "#avgP53" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
  
-          selectId = "#colThree" + d.id;
+          selectId = "#avgCAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
           
-          selectId = "#colFive" + d.id;
+          selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
       })
@@ -340,22 +368,22 @@ var attrX = 1;
         // tip1.hide();
         tip2.hide();
         // tip3.hide();
-       selectId = "#colOne" + d.id;
+       selectId = "#avgP53" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colOne);
+            return lineColor(d.avgP53);
           })
 
-          selectId = "#colThree" + d.id;
+          selectId = "#avgCAS" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colThree);
+            return lineColor(d.avgCAS);
           })
 
-          selectId = "#colFive" + d.id;
+          selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colFive);
+            return lineColor(d.avgRAS);
           })
       })
     // add the x axis and x-label
@@ -387,12 +415,12 @@ var attrX = 1;
       .text("Value");
 }
 
-function columnFiveBarchart(data) {
+function chartThree(data) {
  // console.log(data);
 
  
   var width =  600;
-  var height = 150;
+  var height = 130;
 lineColor.domain([0, finalHighVal]);
 
     var x = d3.scale.linear()
@@ -427,36 +455,36 @@ var attrX = 1;
       .data(data)
       .enter().append("rect")
       .attr("id", function(d, i){
-          return "colFive"+(i+1);
+          return "avgRAS"+(i+1);
       })
       .attr("x", function(d,i){
         return attrX+ (i/2);
       })
       .attr("width", 2)
       .attr("y", function(d){
-        return y(d.colFive);
+        return y(d.avgRAS);
       })
-      .attr("height", function(d) { return height - y(d.colFive); })
+      .attr("height", function(d) { return height - y(d.avgRAS); })
       .attr("fill", function(d){
-                    return lineColor(d.colFive);
+                    return lineColor(d.avgRAS);
                 })
       .on('mouseover', function(d){
         var tipContent = "";
-        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.colOne + '</td><td align="left" style="padding:5px;">' +d.colThree  + '</td><td align="left" style="padding:5px;">' +d.colFive  + "</td></tr>";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.avgP53 + '</td><td align="left" style="padding:5px;">' +d.avgCAS  + '</td><td align="left" style="padding:5px;">' +d.avgRAS  + "</td></tr>";
         
           // tip1.show(tipContent, this);
           // tip2.show(tipContent, this);
           tip3.show(tipContent, this);
-          console.log(d)
-          selectId = "#colOne" + d.id;
+          // console.log(d)
+          selectId = "#avgP53" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
  
-          selectId = "#colThree" + d.id;
+          selectId = "#avgCAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
           
-          selectId = "#colFive" + d.id;
+          selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
       })
@@ -464,22 +492,156 @@ var attrX = 1;
         // tip1.hide();
         // tip2.hide();
         tip3.hide();
-       selectId = "#colOne" + d.id;
+       selectId = "#avgP53" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colOne);
+            return lineColor(d.avgP53);
           })
 
-          selectId = "#colThree" + d.id;
+          selectId = "#avgCAS" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colThree);
+            return lineColor(d.avgCAS);
           })
 
-          selectId = "#colFive" + d.id;
+          selectId = "#avgRAS" + d.id;
           d3.select(selectId)
           .attr("fill", function(d){
-            return lineColor(d.colFive);
+            return lineColor(d.avgRAS);
+          })
+      })
+    // add the x axis and x-label
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")  
+      .attr("x", "-50")
+      .attr("transform", "rotate(-90)");
+    svg.append("text")
+      .attr("class", "xlabel")
+      .attr("text-anchor", "middle")
+      .attr("x", width / 2)
+      .attr("y", 600)
+      .text("");
+    // add the y axis and y-label
+    svg.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,0)")
+      .call(yAxis);
+    svg.append("text")
+      .attr("class", "ylabel")
+      .attr("y", 10) // x and y switched due to rotation
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("transform", "rotate(-90)")
+      .style("text-anchor", "middle")
+      .text("Value");
+}
+
+function chartFour(data) {
+ // console.log(data);
+
+ 
+  var width =  600;
+  var height = 130;
+lineColor.domain([0, finalHighVal]);
+
+    var x = d3.scale.linear()
+      .domain([0,1])
+      .range([0, width]);
+    
+    var y = d3.scale.linear()
+      .domain([0, finalHighVal])
+      .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .ticks(0)
+
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .ticks(5)
+      .orient("left");
+
+  
+    // put the graph in the "twitterViz" div
+    var svg = d3.select("#chart4").append("svg")
+      .attr("width", width)
+      .attr("height", height+30)
+      .append("g")
+      .attr("transform", "translate(" + 70 + "," + 10 + ")");
+var attrX = 1;
+    svg.call(tip4);
+    // set up the bars
+    var bar = svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("id", function(d, i){
+          return "avgWT"+(i+1);
+      })
+      .attr("x", function(d,i){
+        return attrX+ (i/2);
+      })
+      .attr("width", 2)
+      .attr("y", function(d){
+        // console.log(d);
+        return y(d.avgWT);
+      })
+      .attr("height", function(d) { return height - y(d.avgWT); })
+      .attr("fill", function(d){
+                    return lineColor(d.avgWT);
+                })
+      .on('mouseover', function(d){
+        var tipContent = "";
+        tipContent = tipContent + '<tr><td align="left" style="padding:5px;">' + d.chr + "</td>" + '<td align="left" style="padding:5px; width:25px;">' +d.start + '</td><td align="left" style="padding:5px;">' +d.end + '</td><td align="left" style="padding:5px;">' + d.strand +'</td><td align="left" style="padding:5px;">' +d.symbol +'</td><td align="left" style="padding:5px;">' +d.length + '</td><td align="left" style="padding:5px;">' + d.avgP53 + '</td><td align="left" style="padding:5px;">' +d.avgCAS  + '</td><td align="left" style="padding:5px;">' +d.avgRAS  + "</td></tr>";
+        
+          // tip1.show(tipContent, this);
+          // tip2.show(tipContent, this);
+          tip4.show(tipContent, this);
+          // console.log(d)
+          selectId = "#avgP53" + d.id;
+          d3.select(selectId)
+          .attr("fill", "#ff8707");
+ 
+          selectId = "#avgCAS" + d.id;
+          d3.select(selectId)
+          .attr("fill", "#ff8707");
+          
+          selectId = "#avgRAS" + d.id;
+          d3.select(selectId)
+          .attr("fill", "#ff8707");
+
+          selectId = "#avgWT" + d.id;
+          d3.select(selectId)
+          .attr("fill", "#ff8707");
+      })
+      .on('mouseout', function(d){
+        // tip1.hide();
+        // tip2.hide();
+        tip4.hide();
+       selectId = "#avgP53" + d.id;
+          d3.select(selectId)
+          .attr("fill", function(d){
+            return lineColor(d.avgP53);
+          })
+
+          selectId = "#avgCAS" + d.id;
+          d3.select(selectId)
+          .attr("fill", function(d){
+            return lineColor(d.avgCAS);
+          })
+
+          selectId = "#avgRAS" + d.id;
+          d3.select(selectId)
+          .attr("fill", function(d){
+            return lineColor(d.avgRAS);
+          })
+          selectId = "#avgWT" + d.id;
+          d3.select(selectId)
+          .attr("fill", function(d){
+            return lineColor(d.avgWT);
           })
       })
     // add the x axis and x-label
@@ -517,28 +679,41 @@ d3.csv("data.csv", function(error, data) {
   // var format = d3.time.format("%Y-%m-%d");
    var i = 1;
          data.forEach(function(d) {
-                   d.colOne = +d["P53KO-O1"];
-                   d.colThree = +d["p53KO-O-CAS1"];
-                   d.colFive = +d["p53KO-O-RAS1"];
+                   d.col1 = +d["P53KO-O1"];
+                   d.col2 = +d["p53KO-O2"];
+                   d.avgP53 = (d.col1+d.col2)/2;
+                   d.col3 = +d["p53KO-O-CAS1"];
+                   d.col4 = +d["p53KO-O-CAS2"];
+                   d.avgCAS = (d.col3+d.col4)/2;
+                   d.col5 = +d["p53KO-O-RAS1"];
+                   d.col6 = +d["p53KO-O-RAS2"];
+                   d.avgRAS = (d.col5+d.col6)/2;
+                   d.col7 = +d["WT-O1"];
+                   d.col8 = +d["WT-O2"];
+                   d.avgWT = (d.col7+d.col8)/2;
                    d.id = i++;
        });
   console.log(data);
             
-             columnOneBarchart(data);
-             columnThreeBarchart(data);
-             columnFiveBarchart(data);
+             chartOne(data);
+             chartTwo(data);
+             chartThree(data);
+             chartFour(data);
    
 }); 
     </script>
     <div class="charts">
         <div id="column1" class="graph">
-          <h3>P53KO-O1</h3>
+          <h3>P53KO</h3>
         </div>
         <div id="column3" class="graph">
-          <h3>p53KO-O-CAS1</h3>
+          <h3>p53KO-O-CAS</h3>
         </div>
          <div id="column5" class="graph">
-            <h3>p53KO-O-RAS1</h3>
+            <h3>p53KO-O-RAS</h3>
+         </div>
+         <div id="chart4" class="graph">
+            <h3>WT</h3>
          </div>
     </div>
     <div class="network">
