@@ -765,10 +765,10 @@ function updateChartsReset(){
 
 function roseChart(data){
 var rose = Chart.rose(),
-        height = 600,
+        height = 400,
         format = d3.timeParse('%m/%Y'),
         causes = ['disease', 'wounds', 'other'],
-        labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        labels = ['A', 'B', 'C', 'D'];
 
 
       // Load the JSON data:
@@ -777,13 +777,13 @@ var rose = Chart.rose(),
 
         // Format the date and rework the data:
         var scalar;
-        data.forEach( function(d) { 
+        data.forEach( function(d,i) { 
           d.date = format(d.date);
-          d.label = labels[d.date.getMonth()];
+          d.label = labels[i];
           
           // Calculate the average annual mortality, as done by Nightingale:
           // http://understandinguncertainty.org/node/214 
-          scalar = 1000*12 / d.army_size;
+          scalar = 10000*12 / d.army_size;
           d.disease = d.disease * scalar;
           d.wounds  = d.wounds  * scalar;
           d.other   = d.other   * scalar;
@@ -798,15 +798,15 @@ console.log(data);
         var maxRadius = Math.sqrt(maxVal*12 / Math.PI);
 
         // Divide the dataset in two:
-        var dataset2 = data.slice(12,24),
-          dataset1 = data.slice(0,12);
+        // var dataset2 = data.slice(12,24),
+          // dataset1 = data.slice(0,12);
         
         // Append a new figure to the DOM:
         figure = d3.select( 'body' )
           .append( 'figure' );
 
         // Get the figure width:
-        width = parseInt( figure.style( 'width' ), 10 );
+        width = 600;
 
         // Update the chart generator settings:
         rose.legend( causes )
@@ -815,11 +815,11 @@ console.log(data);
           .delay( 0 )
           .duration( 500 )
           .domain( [0, maxRadius] )
-          .angle( function(d) { return d.date.getMonth(); } )
-          .area( function(d, i) { return [d.disease, d.wounds, d.other]; } );             
+          .angle( function(d,i) {  console.log(d); return i; } )
+          .area( function(d, i) { return [d.disease]; } );             
 
         // Bind the data and generate a new chart:
-        figure.datum( dataset1 )
+        figure.datum( data )
           .attr('class', 'chart figure1')
           .call( rose );  
 
@@ -828,22 +828,11 @@ console.log(data);
           .append( 'figure' );
 
         // Get the figure width:
-        width = parseInt( figure.style( 'width' ), 10 );
+        width = 600;
 
         // Update the chart generator settings:
         rose.width( width )
-          .delay( 3000 );
-
-        // Bind the second dataset and generate a new chart:
-        // Append a caption:
-
-
-        // Create a legend:
-        // Chart.legend( causes );
-
-        // Create a slider:
-        // Chart.slider( 0, data.length, 1 ); // minVal, maxVal, step
-        
+          .delay( 100 );       
       }); 
 
 }

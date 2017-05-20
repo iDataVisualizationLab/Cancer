@@ -21,7 +21,7 @@ var Chart = {};
 Chart.rose = function() {
 
 	var margin = {'top': 20, 'right': 20, 'bottom': 20, 'left': 20},
-		height = 500,
+		height = 350,
 		width = 500,
 		color = 'rgb(0,0,0)',
 		area = function(d) { return [d.y]; },
@@ -109,7 +109,7 @@ Chart.rose = function() {
 	function createBase( selection ) {
 
 		// Create the SVG element:
-		canvas = d3.select( selection ).append('svg:svg')
+		canvas = d3.select( "#roseChart" ).append('svg:svg')
 			.attr('width', width)
 			.attr('height', height)
 			.attr('class', 'canvas');
