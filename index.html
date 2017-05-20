@@ -225,7 +225,7 @@ lineColor.domain([0, finalHighVal]);
       .scale(y)
       .ticks(5)
 
-
+var count = 0;
     // put the graph in the "twitterViz" div
     var svg = d3.select("#column1").append("svg")
       .attr("width", width)
@@ -242,14 +242,23 @@ var attrX = 1;
           return "avgP53"+d.id;
       })
       .attr("x", function(d,i){
-        return attrX+(i/2.05);
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
+          console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
+           count++;
+        return attrX+(count);
+
+      }
       })
       .attr("width", 2)
       .attr("y", function(d){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
         return y(d.avgP53);
       })
-      .attr("height", function(d) { return height - y(d.avgP53); })
+      .attr("height", function(d) { 
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
+       return height - y(d.avgP53); })
       .attr("fill", function(d){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
                     return lineColor(d.avgP53);
                 })
       .on('mouseover', function(d){
@@ -274,6 +283,8 @@ var attrX = 1;
           selectId = "#avgWT" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
+
+          roseChart(data);
       })
       .on('mouseout', function(d){
         tip1.hide();
@@ -355,7 +366,7 @@ lineColor.domain([0, finalHighVal]);
       .scale(y)
       .ticks(5)
       
-   
+  var count = 0; 
     // put the graph in the "twitterViz" div
     var svg = d3.select("#column3").append("svg")
       .attr("width", width)
@@ -372,14 +383,23 @@ var attrX = 1;
           return "avgCAS"+d.id;
       })
       .attr("x", function(d,i){
-        return attrX+ (i/2.05);
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
+          console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
+           count++;
+        return attrX+(count);
+
+      }
       })
       .attr("width", 2)
       .attr("y", function(d){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
         return y(d.avgCAS);
       })
-      .attr("height", function(d) { return height - y(d.avgCAS); })
-        .attr("fill", function(d){
+      .attr("height", function(d) { 
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
+       return height - y(d.avgCAS); })
+      .attr("fill", function(d){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
                     return lineColor(d.avgCAS);
                 })
       .on('mouseover', function(d){
@@ -485,7 +505,7 @@ lineColor.domain([0, finalHighVal]);
       .scale(y)
       .ticks(5)
       
-  
+  var count = 0;
     // put the graph in the "twitterViz" div
     var svg = d3.select("#column5").append("svg")
       .attr("width", width)
@@ -502,14 +522,23 @@ var attrX = 1;
           return "avgRAS"+d.id;
       })
       .attr("x", function(d,i){
-        return attrX+ (i/2.05);
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
+          console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
+           count++;
+        return attrX+(count);
+
+      }
       })
       .attr("width", 2)
       .attr("y", function(d){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
         return y(d.avgRAS);
       })
-      .attr("height", function(d) { return height - y(d.avgRAS); })
+      .attr("height", function(d) { 
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
+       return height - y(d.avgRAS); })
       .attr("fill", function(d){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
                     return lineColor(d.avgRAS);
                 })
       .on('mouseover', function(d){
@@ -616,7 +645,7 @@ lineColor.domain([0, finalHighVal]);
       .scale(y)
       .ticks(5)
       
-  
+ var count = 0; 
     // put the graph in the "twitterViz" div
     var svg = d3.select("#chart4").append("svg")
       .attr("width", width)
@@ -632,16 +661,24 @@ var attrX = 1;
       .attr("id", function(d, i){
           return "avgWT"+d.id;
       })
-      .attr("x", function(d,i){
-        return attrX+ (i/2.05);
+     .attr("x", function(d,i){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
+          // console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
+           count++;
+        return attrX+(count);
+
+      }
       })
       .attr("width", 2)
       .attr("y", function(d){
-        // console.log(d);
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
         return y(d.avgWT);
       })
-      .attr("height", function(d) { return height - y(d.avgWT); })
+      .attr("height", function(d) { 
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
+       return height - y(d.avgWT); })
       .attr("fill", function(d){
+        if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
                     return lineColor(d.avgWT);
                 })
       .on('mouseover', function(d){
@@ -730,7 +767,10 @@ function updateChartsAscending(){
     globalData.sort(function(a, b) {
     return a.avgP53 - b.avgP53;
 });
- d3.selectAll("svg").remove();
+ d3.select("#column1 svg").remove();
+  d3.select("#column3 svg").remove();
+   d3.select("#column5 svg").remove();
+    d3.select("#chart4 svg").remove();
              chartOne(globalData);
              chartTwo(globalData);
              chartThree(globalData);
@@ -743,7 +783,10 @@ function updateChartsDescending(){
     globalData.sort(function(a, b) {
     return b.avgP53 - a.avgP53;
 });
- d3.selectAll("svg").remove();
+ d3.select("#column1 svg").remove();
+  d3.select("#column3 svg").remove();
+   d3.select("#column5 svg").remove();
+    d3.select("#chart4 svg").remove();
              chartOne(globalData);
              chartTwo(globalData);
              chartThree(globalData);
@@ -755,7 +798,10 @@ function updateChartsReset(){
     globalData.sort(function(a, b) {
     return a.id - b.id;
 });
- d3.selectAll("svg").remove();
+ d3.select("#column1 svg").remove();
+  d3.select("#column3 svg").remove();
+   d3.select("#column5 svg").remove();
+    d3.select("#chart4 svg").remove();
              chartOne(globalData);
              chartTwo(globalData);
              chartThree(globalData);
@@ -865,7 +911,7 @@ d3.csv("data.csv", function(error, data) {
              chartThree(data);
              chartFour(data);
              globalData = data;
-             roseChart(data);
+             // roseChart(data);
    
 }); 
     </script>
