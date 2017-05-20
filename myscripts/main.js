@@ -1,5 +1,5 @@
-/* 2016 
- * Tuan Dang (on the BioLinker project, as Postdoc for EVL, UIC)
+/* 2017
+ * Tommy Dang (on the Cancer project, as Assistant Professor at TTU)
  *
  * THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
  * WARRANTY.  IN PARTICULAR, THE AUTHORS MAKE NO REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
@@ -31,37 +31,21 @@ var tip1 = d3.tip()
         return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
     });
 
-/*var tip2 = d3.tip()
-    .attr('class', 'd3-tipTwo d3-tooltip')
-    .direction('e')
-    .offset([0, 20])
-    .html(function(d) {
-        return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
-    });
-
-var tip3 = d3.tip()
-    .attr('class', 'd3-tipThree d3-tooltip')
-    .direction('e')
-    .offset([0, 20])
-    .html(function(d) {
-        return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
-    });
-
-var tip4 = d3.tip()
-    .attr('class', 'd3-tipFour d3-tooltip')
-    .direction('e')
-    .offset([0, 20])
-    .html(function(d) {
-        return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
-    });*/
-
+var svg1,svg2,svg3,svg4;
 
 // Read in .csv data and make graph
-d3.csv("data/data.csv", function(error, data) {
-    // var parseDate = d3.time.format("%Y-%m-%d");;
-    // var format = d3.time.format("%Y-%m-%d");
-    var i = 2;
-    data.forEach(function(d) {
+
+var avgP53 = "avgP53";
+var avgCAS = "avgCAS";
+var avgRAS = "avgRAS";
+var avgWT = "avgWT";
+
+//d3.csv("data/data.csv", function(error, data) {
+d3.csv("data/DATA_RKO2.csv", function(error, data) {
+
+
+    var i = 1;
+    globalData = data.filter(function(d) {
         d.col1 = +d["P53KO-O1"];
         d.col2 = +d["p53KO-O2"];
         d.avgP53 = (d.col1+d.col2)/2;
@@ -75,45 +59,39 @@ d3.csv("data/data.csv", function(error, data) {
         d.col8 = +d["WT-O2"];
         d.avgWT = (d.col7+d.col8)/2;
         d.id = i++;
+        return  d[avgP53]+d[avgCAS]+d[avgRAS]+d[avgWT]>1000;
     });
 
-    globalData = data;
-
-    var svg1 = d3.select("#column1").append("svg")
+     svg1 = d3.select("#column1").append("svg")
         .attr("width", width)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 70 + "," + 10 + ")");
-    barChart(svg1);
-    var svg2 = d3.select("#column2").append("svg")
+     svg2 = d3.select("#column2").append("svg")
         .attr("width", width)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 70 + "," + 10 + ")");
-    barChart(svg1);
-    var svg3 = d3.select("#column3").append("svg")
+     svg3 = d3.select("#column3").append("svg")
         .attr("width", width)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 70 + "," + 10 + ")");
-    barChart(svg1);
-    var svg4 = d3.select("#column4").append("svg")
+     svg4 = d3.select("#column4").append("svg")
         .attr("width", width)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 70 + "," + 10 + ")");
-
+    barChart(svg1, avgP53);
+    barChart(svg2, avgCAS);
+    barChart(svg3, avgRAS);
+    barChart(svg4, avgWT);
     // roseChart(data);
 
 });
 
 
-function barChart(svg) {
-    // console.log(data);
-    var allData =globalData;
-    var minVal = (d3.min(globalData, function(d) { return d.avgP53; }));
-    var maxVal = (d3.max(globalData, function(d) { return d.avgP53; }));
-
+function barChart(svg, varName) {
     var width =  600;
     var height = 130;
     avgP53Val = d3.extent(globalData.map(function (d) {
@@ -136,9 +114,7 @@ function barChart(svg) {
     }))
     if(colWTVal[1]>finalHighVal)
         finalHighVal = colWTVal[1];
-
-    console.log(finalHighVal);
-
+    finalHighVal /=4;
 
     lineColor.domain([0, finalHighVal]);
 
@@ -158,37 +134,31 @@ function barChart(svg) {
         .scale(y)
         .ticks(5)
 
-    var count = 0;
-    // put the graph in the "twitterViz" div
 
     var attrX = 1;
     svg.call(tip1);
     // set up the bars
+    var count = 0;
     var bar = svg.selectAll(".bar")
         .data(globalData)
         .enter().append("rect")
         .attr("id", function(d, i){
-            return "avgP53"+d.id;
+            return varName+d.id;
         })
         .attr("x", function(d,i){
-            if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
-                // console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
-                count++;
-                return attrX+(count);
-
-            }
+            return attrX+i;
         })
         .attr("width", 2)
         .attr("y", function(d){
             if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
-                return y(d.avgP53);
+                return y(d[varName]);
         })
         .attr("height", function(d) {
             if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
-                return height - y(d.avgP53); })
+                return height - y(d[varName]); })
         .attr("fill", function(d){
             if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
-                return lineColor(d.avgP53);
+                return lineColor(d[varName]);
         })
         .on('mouseover', function(d){
             var tipContent = "";
@@ -212,9 +182,6 @@ function barChart(svg) {
 
             d3.select("#roseChart svg").remove();
             roseChart(d);
-
-            d3.select("#roseChart svg").remove();
-            roseChart(d);
         })
         .on('mouseout', function(d){
             tip1.hide();
@@ -223,7 +190,6 @@ function barChart(svg) {
                 .attr("fill", function(d){
                     return lineColor(d.avgP53);
                 })
-
             selectId = "#avgCAS" + d.id;
             d3.select(selectId)
                 .attr("fill", function(d){
@@ -273,49 +239,46 @@ function barChart(svg) {
 
 
 function updateChartsAscending(){
-    console.log("yes")
     globalData.sort(function(a, b) {
         return a.avgP53 - b.avgP53;
     });
     d3.select("#column1 svg").remove();
+    d3.select("#column2 svg").remove();
     d3.select("#column3 svg").remove();
-    d3.select("#column5 svg").remove();
-    d3.select("#chart4 svg").remove();
-    chartOne(globalData);
-    chartTwo(globalData);
-    chartThree(globalData);
-    chartFour(globalData);
+    d3.select("#column4 svg").remove();
+    barChart(svg1);
+    barChart(svg2);
+    barChart(svg3);
+    barChart(svg4);
 
 }
 
 function updateChartsDescending(){
-    console.log("yes")
     globalData.sort(function(a, b) {
         return b.avgP53 - a.avgP53;
     });
     d3.select("#column1 svg").remove();
+    d3.select("#column2 svg").remove();
     d3.select("#column3 svg").remove();
-    d3.select("#column5 svg").remove();
-    d3.select("#chart4 svg").remove();
-    chartOne(globalData);
-    chartTwo(globalData);
-    chartThree(globalData);
-    chartFour(globalData);
+    d3.select("#column4 svg").remove();
+    barChart(svg1);
+    barChart(svg2);
+    barChart(svg3);
+    barChart(svg4);
 
 }
 function updateChartsReset(){
-    console.log("yes")
     globalData.sort(function(a, b) {
         return a.id - b.id;
     });
     d3.select("#column1 svg").remove();
+    d3.select("#column2 svg").remove();
     d3.select("#column3 svg").remove();
-    d3.select("#column5 svg").remove();
-    d3.select("#chart4 svg").remove();
-    chartOne(globalData);
-    chartTwo(globalData);
-    chartThree(globalData);
-    chartFour(globalData);
+    d3.select("#column4 svg").remove();
+    barChart(svg1);
+    barChart(svg2);
+    barChart(svg3);
+    barChart(svg4);
 
 }
 
@@ -328,13 +291,7 @@ function roseChart(dataVal){
         causes = ['disease', 'wounds', 'other'],
         labels = ['53KO', 'CAS', 'RAS', 'WT'];
 
-    console.log(data)
-    // Load the JSON data:
-    // d3.json('data.json', function( data ) {
-    // Data from: http://ocp.hul.harvard.edu/dl/contagion/010164675
     var dataObj = [];
-    // Format the date and rework the data:
-    var scalar;
     data.forEach( function(d,i) {
         var obj1 = {"val": d.avgP53, "label": labels[0]};
         dataObj.push(obj1);
