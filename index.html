@@ -243,7 +243,7 @@ var attrX = 1;
       })
       .attr("x", function(d,i){
         if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
-          console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
+          // console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
            count++;
         return attrX+(count);
 
@@ -283,8 +283,12 @@ var attrX = 1;
           selectId = "#avgWT" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
-
-          roseChart(data);
+          
+          d3.select("#roseChart svg").remove();
+          roseChart(d);
+          
+          d3.select("#roseChart svg").remove();
+          roseChart(d);
       })
       .on('mouseout', function(d){
         tip1.hide();
@@ -384,7 +388,7 @@ var attrX = 1;
       })
       .attr("x", function(d,i){
         if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
-          console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
+          // console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
            count++;
         return attrX+(count);
 
@@ -424,6 +428,9 @@ var attrX = 1;
           selectId = "#avgWT" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
+          
+          d3.select("#roseChart svg").remove();
+          roseChart(d);
       })
       .on('mouseout', function(d){
         // tip1.hide();
@@ -523,7 +530,7 @@ var attrX = 1;
       })
       .attr("x", function(d,i){
         if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000){
-          console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
+          // console.log((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT))
            count++;
         return attrX+(count);
 
@@ -564,6 +571,9 @@ var attrX = 1;
           selectId = "#avgWT" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
+          
+          d3.select("#roseChart svg").remove();
+          roseChart(d);
       })
       .on('mouseout', function(d){
         // tip1.hide();
@@ -706,6 +716,9 @@ var attrX = 1;
           selectId = "#avgWT" + d.id;
           d3.select(selectId)
           .attr("fill", "#ff8707");
+          
+          d3.select("#roseChart svg").remove();
+          roseChart(d);
       })
       .on('mouseout', function(d){
         // tip1.hide();
@@ -809,36 +822,36 @@ function updateChartsReset(){
 
 }
 
-function roseChart(data){
+function roseChart(dataVal){
+var data = [];
+data.push(dataVal);
 var rose = Chart.rose(),
         height = 400,
         format = d3.timeParse('%m/%Y'),
         causes = ['disease', 'wounds', 'other'],
-        labels = ['A', 'B', 'C', 'D'];
+        labels = ['53KO', 'CAS', 'RAS', 'WT'];
 
-
+console.log(data)
       // Load the JSON data:
-      d3.json('data.json', function( data ) {
+      // d3.json('data.json', function( data ) {
         // Data from: http://ocp.hul.harvard.edu/dl/contagion/010164675
-
+var dataObj = [];
         // Format the date and rework the data:
         var scalar;
         data.forEach( function(d,i) { 
-          d.date = format(d.date);
-          d.label = labels[i];
-          
-          // Calculate the average annual mortality, as done by Nightingale:
-          // http://understandinguncertainty.org/node/214 
-          scalar = 10000*12 / d.army_size;
-          d.disease = d.disease * scalar;
-          d.wounds  = d.wounds  * scalar;
-          d.other   = d.other   * scalar;
+          var obj1 = {"val": d.avgP53, "label": labels[0]};
+          dataObj.push(obj1);
+          var obj2 = {"val": d.avgCAS, "label": labels[1]};
+          dataObj.push(obj2);
+          var obj3 = {"val": d.avgRAS, "label": labels[2]};
+          dataObj.push(obj3);
+          var obj4 = {"val": d.avgWT, "label": labels[3]};
+          dataObj.push(obj4);
         } );
+        data = dataObj;
 console.log(data);
         // Get the maximum value:
-        var maxVal = d3.max( data, function(d) {
-          return d3.max( [d.disease, d.wounds, d.other] );
-        });
+        var maxVal = finalHighVal;
 
         // Where the maximum value gives us the maximum radius:
         var maxRadius = Math.sqrt(maxVal*12 / Math.PI);
@@ -862,7 +875,7 @@ console.log(data);
           .duration( 500 )
           .domain( [0, maxRadius] )
           .angle( function(d,i) {  console.log(d); return i; } )
-          .area( function(d, i) { return [d.disease]; } );             
+          .area( function(d, i) { return [d.val]; } );             
 
         // Bind the data and generate a new chart:
         figure.datum( data )
@@ -879,7 +892,7 @@ console.log(data);
         // Update the chart generator settings:
         rose.width( width )
           .delay( 100 );       
-      }); 
+      // }); 
 
 }
 

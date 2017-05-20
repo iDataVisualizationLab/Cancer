@@ -2,8 +2,8 @@
   {
   	"date": "4/1854",
   	"army_size": 8571, 
-  	"disease": 1, 
-  	"wounds": 0, 
-  	"other": 5 
+  	"disease": 1000, 
+  	"wounds": 500, 
+  	"other": 50
   }
 ]
