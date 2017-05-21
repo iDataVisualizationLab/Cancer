@@ -270,7 +270,7 @@ function hoverBar(data){
         barsVal[1] = +data['RAS/WT'];
         barsVal[2] = +data['P53KO/WT'];
         barsVal[3] = +data['CAS/WT'];
-console.log(data)
+
   lineColor.domain([finalLowVal, finalHighVal]);
     var x = d3.scaleLinear()
         .domain([0,1])
@@ -291,7 +291,7 @@ console.log(data)
     var yAxis = d3.axisLeft()
         .scale(y2)
         .ticks(5)
-console.log(finalLowVal)
+
 
       var bar = barsvg.selectAll("rect")
         .data(barsVal)
@@ -300,7 +300,7 @@ console.log(finalLowVal)
             console.log(d)
             return i*4;
         })
-        .attr("width", 3)
+        .attr("width", 4)
         .attr("y", function(d){
             if (d>=0)
                 return height - y(d);
@@ -339,10 +339,10 @@ console.log(finalLowVal)
         // .text(varName);
 }
 
-function updateChartsAscending(){
+function updateChartsAscending(varName){
     var stepX = (width-50)/globalData.length;
     globalData.sort(function(a, b) {   // Order by average P53 by default
-        return b[vars[0]] - a[vars[0]];
+        return b[varName] - a[varName];
     });
     globalData.forEach(function (d,i) {
         d.x = i*stepX;
@@ -355,10 +355,10 @@ function updateChartsAscending(){
     }
 }
 
-function updateChartsDescending(){
+function updateChartsDescending(varName){
     var stepX = (width-50)/globalData.length;
     globalData.sort(function(a, b) {   // Order by average P53 by default
-        return a[vars[0]] - b[vars[0]];
+        return a[varName] - b[varName];
     });
     globalData.forEach(function (d,i) {
         d.x = i*stepX;

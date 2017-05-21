@@ -126,18 +126,24 @@ tr,td{
 
 
     <div class="charts">
+    <button onclick="updateChartsReset()">Order by TP53KO</button>
         <div id="column1" class="graph">
-            <button onclick="updateChartsReset()">Order by TP53KO</button>
-            <button style="margin-left: 10px;" onclick="updateChartsAscending()">Ascending</button>
-           <button onclick="updateChartsDescending()">Descending</button>
+            <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
+           <button onclick="updateChartsDescending(vars[0])">Descending</button>
         </div>
         <div id="column2" class="graph">
+         <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[1])">Ascending</button>
+           <button onclick="updateChartsDescending(vars[1])">Descending</button>
         </div>
 
          <div id="column3" class="graph">
+          <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[2])">Ascending</button>
+           <button onclick="updateChartsDescending(vars[2])">Descending</button>
          </div>
 
         <div id="column4" class="graph">
+         <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[3])">Ascending</button>
+           <button onclick="updateChartsDescending(vars[3])">Descending</button>
         </div>
          <div id="roseChart"></div>
          <div id="hoverBar"></div>
