@@ -283,17 +283,7 @@ function mouseOver(index) {
 
 function hoverBar(data,barsvg){
     var height = 100;
-<<<<<<< HEAD
-         var barsVal = [];
-=======
-     var barsvg = d3.select("#hoverBar").append("svg")
-     .attr("class", "mouseOverBar")
-        .attr("width", 200)
-        .attr("height", 200)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
-        var barsVal = [];
->>>>>>> 3c5932886f5324bd954f68a9c55a2a291f0239b4
+     var barsVal = [];
         barsVal[0] = +data['RAS/CAS'];
         barsVal[1] = +data['RAS/WT'];
         barsVal[2] = +data['P53KO/WT'];
