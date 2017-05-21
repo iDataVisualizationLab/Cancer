@@ -196,6 +196,7 @@ function barChart(svg, varName) {
                      hBCount++;
              }
             var barsvg = d3.select("#hoverBar").append("svg")
+                 .attr("class", "mouseOverBar")
                 .attr("width", 200)
                 .attr("height", 200)
                 .append("g")
