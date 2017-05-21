@@ -14,7 +14,7 @@ var finalLowVal = 0;
 var hBCount = 0;
 
 var width =1000;
-var height =200;
+var height =205;
 
 
 var lineColor = d3.scaleLinear()
@@ -31,11 +31,13 @@ var tip1 = d3.tip()
     .direction('e')
     .offset([0, 120])
     .html(function(d) {
-        return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>name</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
+        return d;
+        // return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>name</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
     });
 
 var svg1,svg2,svg3,svg4,svgRight1, svgRight2, svgRight3, svgRight4;
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
+var avgVars = ["avgP53","avgCAS","avgRAS","avgWT"];
 var bars={};
 //d3.csv("data/data.csv", function(error, data) {
 d3.csv("data/DATA_RKO2.csv", function(error, data) {
@@ -110,6 +112,7 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
 
+console.log(data);
 });
 
 
@@ -133,7 +136,7 @@ function barChart(svg, varName) {
 
     var x = d3.scaleLinear()
         .domain([0,1])
-        .range([0, width-80]);
+        .range([0, width-41]);
 
     var y = d3.scaleLinear()
         .domain([minV, maxV])
@@ -186,8 +189,8 @@ function barChart(svg, varName) {
         })
         .attr("fill-opacity", 0.7)
         .on('mouseover', function(d,i){
-            var tipContent = "";
-            tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol +'</td><td>' +d.Name +'</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr>";
+            var tipContent = '<p><b>Name: </b>' + d.Name + '</p><table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>';
+            tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol + '</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr></table>";
              if(hBCount!=0){
                      d3.select("#hoverBar svg").remove();
                      hBCount++;
@@ -200,13 +203,14 @@ function barChart(svg, varName) {
              hoverBar(d,barsvg);
              hBCount++;
              var hoverData = d3.select("#hoverBar"); 
-             tipContent = tipContent + hoverData._groups[0][0].innerHTML;
+             tipContent = tipContent  + hoverData._groups[0][0].innerHTML;
              tip1.show(tipContent, this);
 
             mouseOver(i);
         })
         .on('mouseout', function(d){
             tip1.hide();
+            d3.select("#hoverBar svg").remove();
             selectId = "#avgP53" + d.id;
             d3.select(selectId)
                 .attr("fill", function(d){
@@ -279,7 +283,17 @@ function mouseOver(index) {
 
 function hoverBar(data,barsvg){
     var height = 100;
+<<<<<<< HEAD
          var barsVal = [];
+=======
+     var barsvg = d3.select("#hoverBar").append("svg")
+     .attr("class", "mouseOverBar")
+        .attr("width", 200)
+        .attr("height", 200)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
+        var barsVal = [];
+>>>>>>> 3c5932886f5324bd954f68a9c55a2a291f0239b4
         barsVal[0] = +data['RAS/CAS'];
         barsVal[1] = +data['RAS/WT'];
         barsVal[2] = +data['P53KO/WT'];
@@ -386,10 +400,10 @@ function updateChartsDescending(varName){
             });
     }
 }
-function updateChartsReset(){
+function updateChartsReset(varName){
     var stepX = (width-50)/globalData.length;
     globalData.sort(function(a, b) {   // Order by average P53 by default
-        return b.avgP53 - a.avgP53;
+        return b[varName] - a[varName];
     });
     globalData.forEach(function (d,i) {
         d.x = i*stepX;
