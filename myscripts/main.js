@@ -171,7 +171,7 @@ function barChart(svg, varName) {
                      d3.select("#hoverBar svg").remove();
                      hBCount++;
              }
-             //hoverBar(d);
+             hoverBar(d);
              hBCount++;
              var hoverData = d3.select("#hoverBar"); 
              tipContent = tipContent + hoverData._groups[0][0].innerHTML;
@@ -232,14 +232,8 @@ function barChart(svg, varName) {
         .text(varName);
 }
 
-<<<<<<< HEAD
-function mouseOver(index){
-    for (var v = 0; v<4;v++) {
-=======
-
 function mouseOver(index) {
     for (var v = 0; v < 4; v++) {
->>>>>>> 43cbfdbd9c40441b2fc8c2f6955669071691e3da
         bars[vars[v]].transition().duration(500)
             .attr("stroke", function (d, i) {
                 if (index == i) {
@@ -256,6 +250,7 @@ function mouseOver(index) {
             });
     }
 }
+
 function hoverBar(data){
     var height = 100;
      var barsvg = d3.select("#hoverBar").append("svg")
@@ -306,13 +301,13 @@ console.log(finalLowVal)
                 return height;
         })
         .attr("height", function(d) {
-            if (d>=0)
+            if (y(d)>=0)
                 return y(d);
             else
                 return -y(d);
         })
-        .attr("fill", function(d){
-                
+        .attr("fill", function(d,i){
+                return typeColor(vars[i]);
         })
         .attr("fill-opacity", 0.7);
 
