@@ -64,17 +64,15 @@ var x = d3.scaleLinear()
 var y = d3.scaleLinear()
     .range([size - padding / 2, padding / 2]);
 
-var xAxis = d3.svg.axis()
+var xAxis = d3.axisBottom()
     .scale(x)
-    .orient("bottom")
     .ticks(6);
 
-var yAxis = d3.svg.axis()
+var yAxis = d3.axisLeft()
     .scale(y)
-    .orient("left")
     .ticks(6);
 
-var color = d3.scale.category10();
+var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 d3.csv("data/flowers.csv", function(error, data) {
   if (error) throw error;
@@ -90,9 +88,7 @@ d3.csv("data/flowers.csv", function(error, data) {
   xAxis.tickSize(size * n);
   yAxis.tickSize(-size * n);
 
-  var brush = d3.svg.brush()
-      .x(x)
-      .y(y)
+  var brush = d3.brushX()
       .on("brushstart", brushstart)
       .on("brush", brushmove)
       .on("brushend", brushend);
