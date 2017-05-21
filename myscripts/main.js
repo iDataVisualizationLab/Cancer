@@ -10,7 +10,8 @@
 var globalData;
 var termsData;
 var finalHighVal=0;
-
+var finalLowVal = 0;
+var hBCount = 0;
 
 var width =1000;
 var height =200;
@@ -106,6 +107,7 @@ function barChart(svg, varName) {
     }
 
     lineColor.domain([minV, maxV]);
+    finalLowVal = minV;
     finalHighVal = maxV;
 
     var x = d3.scaleLinear()
@@ -165,7 +167,15 @@ function barChart(svg, varName) {
         .on('mouseover', function(d,i){
             var tipContent = "";
             tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol +'</td><td>' +d.Name +'</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr>";
-             // hoverBar(d);
+             if(hBCount!=0){
+                     d3.select("#hoverBar svg").remove();
+                     hBCount++;
+             }
+             hoverBar(d);
+             hBCount++;
+             var hoverData = d3.select("#hoverBar"); 
+             console.log(hoverData._groups[0][0].innerHTML);
+             tipContent = tipContent + hoverData._groups[0][0].innerHTML;
             tip1.show(tipContent, this);
 
             mouseOver(i);
@@ -223,6 +233,7 @@ function barChart(svg, varName) {
         .text(varName);
 }
 
+<<<<<<< HEAD
 
 function mouseOver(index){
     for (var v = 0; v<4;v++) {
@@ -241,6 +252,87 @@ function mouseOver(index){
                 }
             });
     }
+=======
+function hoverBar(data){
+    var height = 100;
+     var barsvg = d3.select("#hoverBar").append("svg")
+        .attr("width", 200)
+        .attr("height", 200)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
+        var barsVal = [];
+        barsVal[0] = +data['RAS/CAS'];
+        barsVal[1] = +data['RAS/WT'];
+        barsVal[2] = +data['P53KO/WT'];
+        barsVal[3] = +data['CAS/WT'];
+console.log(data)
+
+    var x = d3.scaleLinear()
+        .domain([0,1])
+        .range([0, width-80]);
+
+    var y = d3.scaleLinear()
+        .domain([finalLowVal, finalHighVal])
+        .range([-height, height]);
+
+    var y2 = d3.scaleLinear()
+        .domain([-finalHighVal, finalHighVal])
+        .range([height,-height]);
+
+    var xAxis = d3.axisBottom()
+        .scale(x)
+        .ticks(0)
+
+    var yAxis = d3.axisLeft()
+        .scale(y2)
+        .ticks(5)
+console.log(finalLowVal)
+
+      var bar = barsvg.selectAll("rect")
+        .data(barsVal)
+        .enter().append("rect")
+        .attr("x", function(d,i){
+            console.log(d)
+            return i*4;
+        })
+        .attr("width", 3)
+        .attr("y", function(d){
+            if (d>=0)
+                return height - y(d);
+            else
+                return height;
+        })
+        .attr("height", function(d) {
+            if (d>=0)
+                return y(d);
+            else
+                return -y(d);
+        })
+        .attr("fill", function(d){
+                
+        })
+        .attr("fill-opacity", 0.7);
+
+    // add the x axis and x-label
+    barsvg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .attr("x", "-50")
+        .attr("transform", "rotate(-90)");
+    // add the y axis and y-label
+    barsvg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(0,100)")
+        .call(yAxis);
+    barsvg.append("text")
+        .attr("class", "title")
+        .attr("y", 14)
+        .attr("x", (width / 2))
+        .style("text-anchor", "middle")
+        // .text(varName);
+>>>>>>> 9b54787e08946cefb3aaa49dc98a65091cf72736
 }
 
 function updateChartsAscending(){
