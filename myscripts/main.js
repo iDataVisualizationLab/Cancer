@@ -190,6 +190,7 @@ function barChart(svg, varName) {
         })
         .on('mouseout', function(d){
             tip1.hide();
+            d3.select("#hoverBar svg").remove();
             selectId = "#avgP53" + d.id;
             d3.select(selectId)
                 .attr("fill", function(d){
