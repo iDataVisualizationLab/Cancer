@@ -62,7 +62,7 @@
     /*margin-right: 1px;*/
     /*border-right: 1px solid #ccc;*/
   }
-  h3{
+  .title{
     text-align: center;
     width: 600px;
     padding: 0px;
@@ -77,7 +77,7 @@
     margin-top: 50px;
   }
   .charts{
-    width: 600px;
+    width: 1000px;
     float: left;
     margin-right: 20px;
   }
@@ -127,21 +127,17 @@ th, td { display: block;
 
     <div class="charts">
         <div id="column1" class="graph">
-          <h3>P53KO</h3>
           <button style="margin-left: 10px;" onclick="updateChartsAscending()">Ascending</button>
            <button onclick="updateChartsDescending()">Descending</button>
            <button onclick="updateChartsReset()">Reset</button>
         </div>
         <div id="column2" class="graph">
-          <h3>p53KO-O-CAS</h3>
         </div>
 
          <div id="column3" class="graph">
-             <h3>p53KO-O-RAS</h3>
          </div>
 
         <div id="column4" class="graph">
-            <h3>WT</h3>
         </div>
          <div id="roseChart"></div>
     </div>

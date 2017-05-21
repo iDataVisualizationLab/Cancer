@@ -9,9 +9,6 @@
 // This is the MAIN class javasrcipt
 var globalData;
 var termsData;
-var avgP53Val;
-var avgCASVal;
-var avgRASVal;
 var finalHighVal=0;
 
 
@@ -21,7 +18,7 @@ var height =200;
 
 var lineColor = d3.scaleLinear()
     .domain([0,100])
-    .range(['#00f', '#f00'])
+    .range([ '#f00','#00f'])
 
 var tip1 = d3.tip()
     .attr('class', 'd3-tip d3-tooltip')
@@ -35,10 +32,11 @@ var svg1,svg2,svg3,svg4;
 
 // Read in .csv data and make graph
 
-var avgP53 = "avgP53";
-var avgCAS = "avgCAS";
-var avgRAS = "avgRAS";
-var avgWT = "avgWT";
+//var avgP53 = "avgP53";
+//var avgCAS = "avgCAS";
+//var avgRAS = "avgRAS";
+//var avgWT = "avgWT";
+var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
 
 //d3.csv("data/data.csv", function(error, data) {
 d3.csv("data/DATA_RKO2.csv", function(error, data) {
@@ -59,127 +57,112 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         d.col8 = +d["WT-O2"];
         d.avgWT = (d.col7+d.col8)/2;
         d.id = i++;
-        return  d[avgP53]+d[avgCAS]+d[avgRAS]+d[avgWT]>1000;
+        //return d;
+        return  d.avgP53+d.avgCAS+d.avgRAS+d.avgWT>100;
     });
 
      svg1 = d3.select("#column1").append("svg")
-        .attr("width", width)
+        .attr("width", width-10)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + 70 + "," + 10 + ")");
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
      svg2 = d3.select("#column2").append("svg")
-        .attr("width", width)
+        .attr("width", width-10)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + 70 + "," + 10 + ")");
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
      svg3 = d3.select("#column3").append("svg")
-        .attr("width", width)
+        .attr("width", width-10)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + 70 + "," + 10 + ")");
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
      svg4 = d3.select("#column4").append("svg")
-        .attr("width", width)
+        .attr("width", width-10)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + 70 + "," + 10 + ")");
-    barChart(svg1, avgP53);
-    barChart(svg2, avgCAS);
-    barChart(svg3, avgRAS);
-    barChart(svg4, avgWT);
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
+    barChart(svg1, vars[0]);
+    barChart(svg2, vars[1]);
+    barChart(svg3, vars[2]);
+    barChart(svg4, vars[3]);
     // roseChart(data);
 
 });
 
 
 function barChart(svg, varName) {
-    var width =  600;
-    var height = 130;
-    avgP53Val = d3.extent(globalData.map(function (d) {
-        return (d.avgP53);
-    }))
-    avgCASVal = d3.extent(globalData.map(function (d) {
-        return (d.avgRAS);
-    }))
-    if(avgCASVal[1]>avgP53Val)
-        finalHighVal = avgCASVal[1];
+    var height = 100;
+    var maxV = 0;
+    var minV = 0;
+    for (var v = 0; v<4;v++){
+        var ext = d3.extent(globalData.map(function (d) {
+            return +d[vars[v]];
+        }))
+        if(ext[1]>maxV)
+            maxV = ext[1];
+        if(ext[0]<minV)
+            minV = ext[0];
+    }
 
-    avgRASVal = d3.extent(globalData.map(function (d) {
-        return (d.avgRAS);
-    }))
-    if(avgRASVal[1]>finalHighVal)
-        finalHighVal = avgRASVal[1];
-
-    colWTVal = d3.extent(globalData.map(function (d) {
-        return (d.avgWT);
-    }))
-    if(colWTVal[1]>finalHighVal)
-        finalHighVal = colWTVal[1];
-    finalHighVal /=4;
-
-    lineColor.domain([0, finalHighVal]);
+    lineColor.domain([minV, maxV]);
 
     var x = d3.scaleLinear()
         .domain([0,1])
         .range([0, width-80]);
 
     var y = d3.scaleLinear()
-        .domain([0, finalHighVal])
-        .range([height, 0]);
+        .domain([minV, maxV])
+        .range([-height, height]);
+
+    var y2 = d3.scaleLinear()
+        .domain([-maxV, maxV])
+        .range([height,-height]);
 
     var xAxis = d3.axisBottom()
         .scale(x)
         .ticks(0)
 
     var yAxis = d3.axisLeft()
-        .scale(y)
+        .scale(y2)
         .ticks(5)
 
 
-    var attrX = 1;
     svg.call(tip1);
     // set up the bars
-    var count = 0;
     var bar = svg.selectAll(".bar")
         .data(globalData)
         .enter().append("rect")
         .attr("id", function(d, i){
-            return varName+d.id;
+            return varName.replace("/","")+d.id;
         })
         .attr("x", function(d,i){
-            return attrX+i;
+            return i;
         })
         .attr("width", 2)
         .attr("y", function(d){
-            if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
-                return y(d[varName]);
+            if (y(d[varName])>=0)
+                return height - y(d[varName]);
+            else
+                return height;
         })
         .attr("height", function(d) {
-            if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
-                return height - y(d[varName]); })
+            if (y(d[varName])>=0)
+                return y(d[varName]);
+            else
+                return -y(d[varName]);
+        })
         .attr("fill", function(d){
-            if((d.avgP53+d.avgCAS+d.avgRAS+d.avgWT)>1000)
                 return lineColor(d[varName]);
         })
         .on('mouseover', function(d){
             var tipContent = "";
             tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol +'</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr>";
             tip1.show(tipContent, this);
-            selectId = "#avgP53" + d.id;
-            d3.select(selectId)
-                .attr("fill", "#ff8707");
-
-            selectId = "#avgCAS" + d.id;
-            d3.select(selectId)
-                .attr("fill", "#ff8707");
-
-            selectId = "#avgRAS" + d.id;
-            d3.select(selectId)
-                .attr("fill", "#ff8707");
-
-            selectId = "#avgWT" + d.id;
-            d3.select(selectId)
-                .attr("fill", "#ff8707");
-
+            for (var v = 0; v<4;v++) {
+                var selectId = "#"+vars[v].replace("/","") + d.id;
+                d3.select(selectId)
+                    .attr("fill", "#ff0");
+            }
             d3.select("#roseChart svg").remove();
             roseChart(d);
         })
@@ -206,6 +189,11 @@ function barChart(svg, varName) {
                 .attr("fill", function(d){
                     return lineColor(d.avgWT);
                 })
+            for (var v = 0; v<4;v++) {
+                var selectId = "#"+vars[v].replace("/","") + d.id;
+                d3.select(selectId)
+                    .attr("fill", lineColor(d[vars[v]]));
+            }
         })
     // add the x axis and x-label
     svg.append("g")
@@ -224,32 +212,20 @@ function barChart(svg, varName) {
     // add the y axis and y-label
     svg.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate(0,0)")
+        .attr("transform", "translate(0,100)")
         .call(yAxis);
     svg.append("text")
-        .attr("class", "ylabel")
-        .attr("y", 10) // x and y switched due to rotation
-        .attr("x", 0 - (height / 2))
-        .attr("dy", "1em")
-        .attr("transform", "rotate(-90)")
+        .attr("class", "title")
+        .attr("y", 14)
+        .attr("x", (width / 2))
         .style("text-anchor", "middle")
-        .text("Value");
+        .text(varName);
 }
 
 
 
 function updateChartsAscending(){
-    globalData.sort(function(a, b) {
-        return a.avgP53 - b.avgP53;
-    });
-    d3.select("#column1 svg").remove();
-    d3.select("#column2 svg").remove();
-    d3.select("#column3 svg").remove();
-    d3.select("#column4 svg").remove();
-    barChart(svg1);
-    barChart(svg2);
-    barChart(svg3);
-    barChart(svg4);
+
 
 }
 
@@ -287,7 +263,6 @@ function roseChart(dataVal){
     data.push(dataVal);
     var rose = Chart.rose(),
         height = 400,
-        format = d3.timeParse('%m/%Y'),
         causes = ['disease', 'wounds', 'other'],
         labels = ['53KO', 'CAS', 'RAS', 'WT'];
 
