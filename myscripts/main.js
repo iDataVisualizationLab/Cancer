@@ -34,7 +34,7 @@ var tip1 = d3.tip()
         return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>name</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
     });
 
-var svg1,svg2,svg3,svg4,svgRight;
+var svg1,svg2,svg3,svg4,svgRight1, svgRight2, svgRight3, svgRight4;
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
 var bars={};
 //d3.csv("data/data.csv", function(error, data) {
@@ -89,12 +89,26 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
     barChart(svg4, vars[3]);
 
 
-    svgRight = d3.select("#right").append("svg")
+    svgRight1 = d3.select("#right1").append("svg")
         .attr("width", width-10)
-        .attr("height", height)
+        .attr("height", height+45)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
-
+    svgRight2 = d3.select("#right2").append("svg")
+        .attr("width", width-10)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
+    svgRight3 = d3.select("#right3").append("svg")
+        .attr("width", width-10)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
+    svgRight4 = d3.select("#right4").append("svg")
+        .attr("width", width-10)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
 
 });
 
@@ -178,7 +192,12 @@ function barChart(svg, varName) {
                      d3.select("#hoverBar svg").remove();
                      hBCount++;
              }
-             hoverBar(d);
+            var barsvg = d3.select("#hoverBar").append("svg")
+                .attr("width", 200)
+                .attr("height", 200)
+                .append("g")
+                .attr("transform", "translate(" + 30 + "," + 0 + ")");
+             hoverBar(d,barsvg);
              hBCount++;
              var hoverData = d3.select("#hoverBar"); 
              tipContent = tipContent + hoverData._groups[0][0].innerHTML;
@@ -258,14 +277,9 @@ function mouseOver(index) {
     }
 }
 
-function hoverBar(data){
+function hoverBar(data,barsvg){
     var height = 100;
-     var barsvg = d3.select("#hoverBar").append("svg")
-        .attr("width", 200)
-        .attr("height", 200)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
-        var barsVal = [];
+         var barsVal = [];
         barsVal[0] = +data['RAS/CAS'];
         barsVal[1] = +data['RAS/WT'];
         barsVal[2] = +data['P53KO/WT'];
@@ -338,6 +352,8 @@ function hoverBar(data){
         .style("text-anchor", "middle")
         // .text(varName);
 }
+
+
 
 function updateChartsAscending(varName){
     var stepX = (width-50)/globalData.length;

@@ -65,12 +65,12 @@
     margin-bottom: 10px;
   }
 
-  .rightPanel{
+  .right{
       width: 400px;
       float: left;
       margin-right: 20px;
   }
-  #right{
+  #right1, #right2, #right3, #right4{
       border: 1px solid #555;
       border-radius: 5px;
       background: #fff;
@@ -126,7 +126,7 @@ tr,td{
 
 
     <div class="charts">
-    <button onclick="updateChartsReset()">Order by TP53KO</button>
+     <button onclick="updateChartsReset()">Order by TP53KO</button>
         <div id="column1" class="graph">
             <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
            <button onclick="updateChartsDescending(vars[0])">Descending</button>
@@ -148,7 +148,11 @@ tr,td{
          <div id="roseChart"></div>
          <div id="hoverBar"></div>
     </div>
-    <div class="rightPanel" id="right">
+    <div class="rightPanel">
+        <div id="right1" class="right"></div>
+        <div id="right2" class="right"></div>
+        <div id="right3" class="right"></div>
+        <div id="right4" class="right"></div>
     </div>
 
     <div id="multi-plane-representation" style="margin-left: 620px;">
