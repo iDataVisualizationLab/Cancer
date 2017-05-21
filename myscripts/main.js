@@ -32,7 +32,7 @@ var tip1 = d3.tip()
         // return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>name</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
     });
 
-var svg1,svg2,svg3,svg4,svgRight1, svgRight2, svgRight3, svgRight4;
+var svg1,svg2,svg3,svg4,svgRight11, svgRight21, svgRight31, svgRight41,svgRight12, svgRight22, svgRight32, svgRight42;
 var svgRights = [];
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
 var avgVars = ["avgP53","avgCAS","avgRAS","avgWT"];
@@ -83,30 +83,54 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
-    svgRight1 = d3.select("#right1").append("svg")
-        .attr("width", width-10)
+    svgRight11 = d3.select("#right1").append("svg")
+        .attr("width", 200)
         .attr("height", height+45)
         .append("g")
-        .attr("transform", "translate(" + 30 + "," + 10 + ")");
-    svgRight2 = d3.select("#right2").append("svg")
-        .attr("width", width-10)
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRight21 = d3.select("#right2").append("svg")
+        .attr("width", 200)
         .attr("height", height+23)
         .append("g")
-        .attr("transform", "translate(" + 30 + "," + 10 + ")");
-    svgRight3 = d3.select("#right3").append("svg")
-        .attr("width", width-10)
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRight31 = d3.select("#right3").append("svg")
+        .attr("width", 200)
         .attr("height", height+23)
         .append("g")
-        .attr("transform", "translate(" + 30 + "," + 10 + ")");
-    svgRight4 = d3.select("#right4").append("svg")
-        .attr("width", width-10)
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRight41 = d3.select("#right4").append("svg")
+        .attr("width", 200)
         .attr("height", height+23)
         .append("g")
-        .attr("transform", "translate(" + 30 + "," + 10 + ")");
-    svgRights.push(svgRight1);
-    svgRights.push(svgRight2);
-    svgRights.push(svgRight3);
-    svgRights.push(svgRight4);
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRight12 = d3.select("#right1").append("svg")
+        .attr("width", 200)
+        .attr("height", height+45)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRight22 = d3.select("#right2").append("svg")
+        .attr("width", 200)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRight32 = d3.select("#right3").append("svg")
+        .attr("width", 200)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRight42= d3.select("#right4").append("svg")
+        .attr("width", 200)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+    svgRights.push(svgRight11);
+    svgRights.push(svgRight21);
+    svgRights.push(svgRight31);
+    svgRights.push(svgRight41);
+    svgRights.push(svgRight12);
+    svgRights.push(svgRight22);
+    svgRights.push(svgRight32);
+    svgRights.push(svgRight42);
 
     barChart(svg1, vars[0]);
     barChart(svg2, vars[1]);
@@ -158,14 +182,23 @@ function barChart(svg, varName) {
         .scale(y2)
         .ticks(5)
 
-    // Draw the top and the bottom
+    // Draw the top
     for (var v = 0; v < 4; v++) {
         globalData.sort(function(a, b) {   // Order by average P53 by default
             return b[vars[v]] - a[vars[v]];
         });
 
-        svgRights[v].selectAll("*").remove();;
-        addBarChart(globalData[0],svgRights[v], 20, 20);
+        svgRights[v].selectAll("*").remove();
+        addBarChart(globalData[0],svgRights[v],v,"Highest ");
+    }
+    // Draw the bottom
+    for (var v = 0; v < 4; v++) {
+        globalData.sort(function(a, b) {   // Order by average P53 by default
+            return a[vars[v]] - b[vars[v]];
+        });
+
+        svgRights[4+v].selectAll("*").remove();
+        addBarChart(globalData[0],svgRights[4+v],v,"Lowest ");
     }
 
 
@@ -298,7 +331,7 @@ function mouseOver(index) {
     }
 }
 
-function addBarChart(data,barsvg,xx, yy){
+function addBarChart(data,barsvg,varIndex,str){
     var height = 100;
      var barsVal = [];
         barsVal[0] = +data['RAS/CAS'];
@@ -332,7 +365,7 @@ function addBarChart(data,barsvg,xx, yy){
         .enter().append("rect")
         .attr("x", function(d,i){
             console.log(d)
-            return i*20;
+            return 2+i*20;
         })
         .attr("width", 19)
         .attr("y", function(d){
@@ -366,11 +399,11 @@ function addBarChart(data,barsvg,xx, yy){
         .attr("transform", "translate(0,100)")
         .call(yAxis);
     barsvg.append("text")
-        .attr("class", "title")
-        .attr("y", 14)
-        .attr("x", (width / 2))
+        .attr("class", "titleRight ")
+        .attr("y", 0)
+        .attr("x", 50)
         .style("text-anchor", "middle")
-        // .text(varName);
+        .text(str+vars[varIndex]);
 }
 
 
