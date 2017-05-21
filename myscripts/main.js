@@ -34,7 +34,7 @@ var tip1 = d3.tip()
         return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>name</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
     });
 
-var svg1,svg2,svg3,svg4;
+var svg1,svg2,svg3,svg4,svgRight;
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
 var bars={};
 //d3.csv("data/data.csv", function(error, data) {
@@ -87,7 +87,14 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
     barChart(svg2, vars[1]);
     barChart(svg3, vars[2]);
     barChart(svg4, vars[3]);
-    // roseChart(data);
+
+
+    svgRight = d3.select("#right").append("svg")
+        .attr("width", width-10)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 0 + ")");
+
 
 });
 

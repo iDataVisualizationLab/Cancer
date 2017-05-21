@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
-  <body>
-    <title>Cancer Bar charts</title>
+  <body style="background-color:#ddd;">
+    <title>Cancer charts</title>
     <style>
       .d3-tip {
       line-height: 1;
@@ -11,30 +11,7 @@
       font-size: 13px;
       margin-top: 0px;
             }
-       .d3-tipTwo {
-      line-height: 1;
-      padding: 12px;
-      color: #000;
-      border-radius: 2px;
-      font-size: 13px;
-            /*margin-top: 130px;*/
-      }
-       .d3-tipThree {
-      line-height: 1;
-      padding: 12px;
-      color: #000;
-      border-radius: 2px;
-      font-size: 13px;
-            /*margin-top: 300px;*/
-      }
-      .d3-tipFour {
-      line-height: 1;
-      padding: 12px;
-      color: #000;
-      border-radius: 2px;
-      font-size: 13px;
-            /*margin-top: 500px;*/
-      }
+
       .bar rect {
       fill: steelblue;
       shape-rendering: crispEdges;
@@ -84,9 +61,20 @@
   #column1, #column2, #column3, #column4{
     border: 1px solid #555;
     border-radius: 5px;
-    background: #eee;
+    background: #fff;
     margin-bottom: 10px;
+  }
 
+  .rightPanel{
+      width: 400px;
+      float: left;
+      margin-right: 20px;
+  }
+  #right{
+      border: 1px solid #555;
+      border-radius: 5px;
+      background: #fff;
+      margin-bottom: 10px;
   }
 
 table { border-collapse: collapse; 
@@ -154,7 +142,7 @@ tr,td{
          <div id="roseChart"></div>
          <div id="hoverBar"></div>
     </div>
-    <div class="network" id="container">
+    <div class="rightPanel" id="right">
     </div>
 
     <div id="multi-plane-representation" style="margin-left: 620px;">
