@@ -143,6 +143,12 @@ button{
     <button onclick="updateChartsReset(avgVars[1])">Order by P53KO-O-CAS</button>
     <button onclick="updateChartsReset(avgVars[2])">Order by P53KO-O-RAS</button>
     <button onclick="updateChartsReset(avgVars[3])">Order by WT</button><br/>
+    <select onchange="updateChartsReset(this.value)">
+    <option value="Choose" selected="selected">Choose</option>
+    <option value="avgP53" >Order by P53KO</option>
+    <option value="avgCAS" >Order by P53KO-O-CAS</option>
+    </select>
+
         <div id="column1" class="graph">
             <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
            <button onclick="updateChartsDescending(vars[0])">Descending</button>
