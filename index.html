@@ -116,6 +116,10 @@ tr,td{
 #hoverBar{
   float: right;
 }
+button{
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
 
     </style>
     <script src="js/jquery.2.1.1.min.js"></script>
@@ -126,7 +130,10 @@ tr,td{
 
 
     <div class="charts">
-    <button onclick="updateChartsReset()">Order by TP53KO</button>
+    <button onclick="updateChartsReset(avgVars[0])">Order by P53KO</button>
+    <button onclick="updateChartsReset(avgVars[1])">Order by P53KO-O-CAS</button>
+    <button onclick="updateChartsReset(avgVars[2])">Order by P53KO-O-RAS</button>
+    <button onclick="updateChartsReset(avgVars[3])">Order by WT</button><br/>
         <div id="column1" class="graph">
             <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
            <button onclick="updateChartsDescending(vars[0])">Descending</button>

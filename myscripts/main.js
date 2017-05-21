@@ -14,7 +14,7 @@ var finalLowVal = 0;
 var hBCount = 0;
 
 var width =1000;
-var height =200;
+var height =205;
 
 
 var lineColor = d3.scaleLinear()
@@ -36,6 +36,7 @@ var tip1 = d3.tip()
 
 var svg1,svg2,svg3,svg4,svgRight;
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
+var avgVars = ["avgP53","avgCAS","avgRAS","avgWT"];
 var bars={};
 //d3.csv("data/data.csv", function(error, data) {
 d3.csv("data/DATA_RKO2.csv", function(error, data) {
@@ -96,6 +97,7 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
 
 
+console.log(data);
 });
 
 
@@ -119,7 +121,7 @@ function barChart(svg, varName) {
 
     var x = d3.scaleLinear()
         .domain([0,1])
-        .range([0, width-80]);
+        .range([0, width-41]);
 
     var y = d3.scaleLinear()
         .domain([minV, maxV])
@@ -370,10 +372,10 @@ function updateChartsDescending(varName){
             });
     }
 }
-function updateChartsReset(){
+function updateChartsReset(varName){
     var stepX = (width-50)/globalData.length;
     globalData.sort(function(a, b) {   // Order by average P53 by default
-        return b.avgP53 - a.avgP53;
+        return b[varName] - a[varName];
     });
     globalData.forEach(function (d,i) {
         d.x = i*stepX;
