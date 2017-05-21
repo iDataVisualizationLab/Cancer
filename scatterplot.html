@@ -58,10 +58,10 @@ var width = 960,
     size = 230,
     padding = 20;
 
-var x = d3.scale.linear()
+var x = d3.scaleLinear()
     .range([padding / 2, size - padding / 2]);
 
-var y = d3.scale.linear()
+var y = d3.scaleLinear()
     .range([size - padding / 2, padding / 2]);
 
 var xAxis = d3.svg.axis()
@@ -76,7 +76,7 @@ var yAxis = d3.svg.axis()
 
 var color = d3.scale.category10();
 
-d3.csv("flowers.csv", function(error, data) {
+d3.csv("data/flowers.csv", function(error, data) {
   if (error) throw error;
 
   var domainByTrait = {},

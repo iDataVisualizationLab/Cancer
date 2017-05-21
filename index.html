@@ -129,6 +129,10 @@ button{
   background: #fff;
   padding: 10px;
 }
+select{
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
 
     </style>
     <script src="js/jquery.2.1.1.min.js"></script>
@@ -139,14 +143,12 @@ button{
 
 
     <div class="charts">
-    <button onclick="updateChartsReset(avgVars[0])">Order by P53KO</button>
-    <button onclick="updateChartsReset(avgVars[1])">Order by P53KO-O-CAS</button>
-    <button onclick="updateChartsReset(avgVars[2])">Order by P53KO-O-RAS</button>
-    <button onclick="updateChartsReset(avgVars[3])">Order by WT</button><br/>
     <select onchange="updateChartsReset(this.value)">
     <option value="Choose" selected="selected">Choose</option>
     <option value="avgP53" >Order by P53KO</option>
     <option value="avgCAS" >Order by P53KO-O-CAS</option>
+    <option value="avgRAS" >Order by P53KO-O-RAS</option>
+    <option value="avgWT" >Order by WT</option>
     </select>
 
         <div id="column1" class="graph">
