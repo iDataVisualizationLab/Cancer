@@ -48,8 +48,13 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         d.col8 = +d["WT-O2"];
         d.avgWT = (d.col7+d.col8)/2;
         d.id = i++;
-        //return d;
-        return  d.avgP53+d.avgCAS+d.avgRAS+d.avgWT>10000;
+
+        var diff = 0.75;
+        return  (d.avgP53+d.avgCAS+d.avgRAS+d.avgWT>500)
+            && Math.abs(d[vars[0]])>diff
+            && Math.abs(d[vars[1]])>diff
+            && Math.abs(d[vars[2]])>diff
+            && Math.abs(d[vars[3]])>diff;
     });
 
      svg1 = d3.select("#column1").append("svg")
@@ -235,32 +240,34 @@ function updateChartsAscending(){
 }
 
 function updateChartsDescending(){
-    globalData.sort(function(a, b) {
-        return b.avgP53 - a.avgP53;
+    var stepX = (width-50)/globalData.length;
+    globalData.sort(function(a, b) {   // Order by average P53 by default
+        return a[vars[0]] - b[vars[0]];
     });
-    d3.select("#column1 svg").remove();
-    d3.select("#column2 svg").remove();
-    d3.select("#column3 svg").remove();
-    d3.select("#column4 svg").remove();
-    barChart(svg1);
-    barChart(svg2);
-    barChart(svg3);
-    barChart(svg4);
-
+    globalData.forEach(function (d,i) {
+        d.x = i*stepX;
+    });
+    for (var v = 0; v<4;v++) {
+        bars[vars[v]].transition().duration(500)
+            .attr("x", function (d) {
+                return d.x;
+            });
+    }
 }
 function updateChartsReset(){
-    globalData.sort(function(a, b) {
-        return a.id - b.id;
+    var stepX = (width-50)/globalData.length;
+    globalData.sort(function(a, b) {   // Order by average P53 by default
+        return b.avgP53 - a.avgP53;
     });
-    d3.select("#column1 svg").remove();
-    d3.select("#column2 svg").remove();
-    d3.select("#column3 svg").remove();
-    d3.select("#column4 svg").remove();
-    barChart(svg1);
-    barChart(svg2);
-    barChart(svg3);
-    barChart(svg4);
-
+    globalData.forEach(function (d,i) {
+        d.x = i*stepX;
+    });
+    for (var v = 0; v<4;v++) {
+        bars[vars[v]].transition().duration(500)
+            .attr("x", function (d) {
+                return d.x;
+            });
+    }
 }
 
 function roseChart(dataVal){

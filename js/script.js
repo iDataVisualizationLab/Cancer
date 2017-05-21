@@ -166,7 +166,6 @@ Chart.rose = function() {
 			.attr('transform', 'scale(1,1)');
 
 		// Append labels to the wedgeGroups:
-		console.log(d3.selectAll('.label-path'));
 		var numLabels = 0;
 		
 		wedgeGroups.selectAll('.label-path')
