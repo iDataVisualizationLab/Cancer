@@ -20,14 +20,18 @@ var lineColor = d3.scaleLinear()
     .domain([0,100])
     .range([ '#f00','#00f'])
 
+var typeColor = d3.scaleOrdinal(d3.schemeCategory10);
+
+
+
+
 var tip1 = d3.tip()
     .attr('class', 'd3-tip d3-tooltip')
     .direction('e')
-    .offset([0, 20])
+    .offset([0, 120])
     .html(function(d) {
         return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>name</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
     });
-// '<div id="hoverBar">Test</div>'
 
 var svg1,svg2,svg3,svg4;
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
@@ -91,7 +95,6 @@ function barChart(svg, varName) {
     var height = 100;
     var maxV = 0;
     var minV = 0;
-    console.log(globalData)
     for (var v = 0; v<4;v++){
         var ext = d3.extent(globalData.map(function (d) {
             return +d[vars[v]];
@@ -156,19 +159,16 @@ function barChart(svg, varName) {
                 return -y(d[varName]);
         })
         .attr("fill", function(d){
-                return lineColor(d[varName]);
+                return typeColor(varName);
         })
         .attr("fill-opacity", 0.7)
-        .on('mouseover', function(d){
+        .on('mouseover', function(d,i){
             var tipContent = "";
             tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol +'</td><td>' +d.Name +'</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr>";
              // hoverBar(d);
             tip1.show(tipContent, this);
-            for (var v = 0; v<4;v++) {
-                var selectId = "#"+vars[v].replace("/","") + d.id;
-                d3.select(selectId)
-                    .attr("fill", "#ff0");
-            }
+
+            mouseOver(i);
         })
         .on('mouseout', function(d){
             tip1.hide();
@@ -196,7 +196,7 @@ function barChart(svg, varName) {
             for (var v = 0; v<4;v++) {
                 var selectId = "#"+vars[v].replace("/","") + d.id;
                 d3.select(selectId)
-                    .attr("fill", lineColor(d[vars[v]]));
+                    .attr("fill", typeColor(vars[v]));
             }
         })
 
@@ -223,32 +223,24 @@ function barChart(svg, varName) {
         .text(varName);
 }
 
-function hoverBar(data){
-     var barsvg = d3.select("#hoverBar").append("svg")
-        .attr("width", width-10)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
 
-      var bar = barsvg.selectAll(".bar")
-        .data(data)
-        .enter().append("rect")
-        .attr("x", function(d,i){
-            return i;
-        })
-        .attr("width", 2)
-        .attr("y", function(d, i){
-            return 5 * i;
-        })
-        .attr("height", function(d, i) {
-             return 5 * i;
-        })
-        .attr("fill", function(d){
-                
-        })
-        .attr("fill-opacity", 0.7);
-
-        return bar;
+function mouseOver(index){
+    for (var v = 0; v<4;v++) {
+        bars[vars[v]].transition().duration(500)
+            .attr("stroke", function (d,i) {
+                if (index==i) {
+                    return "#000";
+                }
+            })
+            .attr("fill", function (d,i) {
+                if (index==i) {
+                    return "#ff0";
+                }
+                else{
+                    return typeColor(vars[v]);
+                }
+            });
+    }
 }
 
 function updateChartsAscending(){
