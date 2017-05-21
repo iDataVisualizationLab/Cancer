@@ -29,19 +29,10 @@ var tip1 = d3.tip()
     });
 
 var svg1,svg2,svg3,svg4;
-
-// Read in .csv data and make graph
-
-//var avgP53 = "avgP53";
-//var avgCAS = "avgCAS";
-//var avgRAS = "avgRAS";
-//var avgWT = "avgWT";
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
-
+var bars={};
 //d3.csv("data/data.csv", function(error, data) {
 d3.csv("data/DATA_RKO2.csv", function(error, data) {
-
-
     var i = 1;
     globalData = data.filter(function(d) {
         d.col1 = +d["P53KO-O1"];
@@ -58,7 +49,7 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         d.avgWT = (d.col7+d.col8)/2;
         d.id = i++;
         //return d;
-        return  d.avgP53+d.avgCAS+d.avgRAS+d.avgWT>100;
+        return  d.avgP53+d.avgCAS+d.avgRAS+d.avgWT>10000;
     });
 
      svg1 = d3.select("#column1").append("svg")
@@ -127,16 +118,21 @@ function barChart(svg, varName) {
         .ticks(5)
 
 
+    globalData.sort(function(a, b) {   // Order by average P53 by default
+        return b.avgP53 - a.avgP53;
+    });
+
     svg.call(tip1);
     // set up the bars
-    var bar = svg.selectAll(".bar")
+    var stepX = (width-10)/globalData.length;
+    bars[varName] = svg.selectAll(".bar")
         .data(globalData)
         .enter().append("rect")
         .attr("id", function(d, i){
             return varName.replace("/","")+d.id;
         })
         .attr("x", function(d,i){
-            return i;
+            return i*stepX;
         })
         .attr("width", 2)
         .attr("y", function(d){
@@ -154,6 +150,7 @@ function barChart(svg, varName) {
         .attr("fill", function(d){
                 return lineColor(d[varName]);
         })
+        .attr("fill-opacity", 0.7)
         .on('mouseover', function(d){
             var tipContent = "";
             tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol +'</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr>";
@@ -195,6 +192,9 @@ function barChart(svg, varName) {
                     .attr("fill", lineColor(d[vars[v]]));
             }
         })
+
+
+
     // add the x axis and x-label
     svg.append("g")
         .attr("class", "x axis")
@@ -203,12 +203,6 @@ function barChart(svg, varName) {
         .selectAll("text")
         .attr("x", "-50")
         .attr("transform", "rotate(-90)");
-    svg.append("text")
-        .attr("class", "xlabel")
-        .attr("text-anchor", "middle")
-        .attr("x", width / 2)
-        .attr("y", 600)
-        .text("");
     // add the y axis and y-label
     svg.append("g")
         .attr("class", "y axis")
@@ -225,8 +219,19 @@ function barChart(svg, varName) {
 
 
 function updateChartsAscending(){
-
-
+    var stepX = (width-50)/globalData.length;
+    globalData.sort(function(a, b) {   // Order by average P53 by default
+        return b[vars[0]] - a[vars[0]];
+    });
+    globalData.forEach(function (d,i) {
+        d.x = i*stepX;
+    });
+    for (var v = 0; v<4;v++) {
+        bars[vars[v]].transition().duration(500)
+            .attr("x", function (d) {
+                return d.x;
+            });
+    }
 }
 
 function updateChartsDescending(){
@@ -292,8 +297,6 @@ function roseChart(dataVal){
     figure = d3.select( 'body' )
         .append( 'figure' );
 
-    // Get the figure width:
-    width = 600;
 
     // Update the chart generator settings:
     rose.legend( causes )
@@ -302,7 +305,7 @@ function roseChart(dataVal){
         .delay( 0 )
         .duration( 500 )
         .domain( [0, maxRadius] )
-        .angle( function(d,i) {  console.log(d); return i; } )
+        .angle( function(d,i) {  return i; } )
         .area( function(d, i) { return [d.val]; } );
 
     // Bind the data and generate a new chart:
@@ -314,8 +317,6 @@ function roseChart(dataVal){
     figure = d3.select( 'body' )
         .append( 'figure' );
 
-    // Get the figure width:
-    width = 600;
 
     // Update the chart generator settings:
     rose.width( width )
