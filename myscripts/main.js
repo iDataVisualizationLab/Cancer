@@ -233,8 +233,6 @@ function barChart(svg, varName) {
         .text(varName);
 }
 
-<<<<<<< HEAD
-
 function mouseOver(index){
     for (var v = 0; v<4;v++) {
         bars[vars[v]].transition().duration(500)
@@ -252,7 +250,7 @@ function mouseOver(index){
                 }
             });
     }
-=======
+}
 function hoverBar(data){
     var height = 100;
      var barsvg = d3.select("#hoverBar").append("svg")
@@ -266,7 +264,7 @@ function hoverBar(data){
         barsVal[2] = +data['P53KO/WT'];
         barsVal[3] = +data['CAS/WT'];
 console.log(data)
-
+  lineColor.domain([finalLowVal, finalHighVal]);
     var x = d3.scaleLinear()
         .domain([0,1])
         .range([0, width-80]);
@@ -332,7 +330,6 @@ console.log(finalLowVal)
         .attr("x", (width / 2))
         .style("text-anchor", "middle")
         // .text(varName);
->>>>>>> 9b54787e08946cefb3aaa49dc98a65091cf72736
 }
 
 function updateChartsAscending(){
