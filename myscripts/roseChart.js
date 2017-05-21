@@ -27,7 +27,6 @@ var tip1 = d3.tip()
     .html(function(d) {
         return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
     });
-// '<div id="hoverBar">Test</div>'
 
 var svg1,svg2,svg3,svg4;
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
@@ -157,13 +156,14 @@ function barChart(svg, varName) {
         .on('mouseover', function(d){
             var tipContent = "";
             tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol +'</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr>";
-             // hoverBar(d);
             tip1.show(tipContent, this);
             for (var v = 0; v<4;v++) {
                 var selectId = "#"+vars[v].replace("/","") + d.id;
                 d3.select(selectId)
                     .attr("fill", "#ff0");
             }
+            d3.select("#roseChart svg").remove();
+            roseChart(d);
         })
         .on('mouseout', function(d){
             tip1.hide();
@@ -218,33 +218,7 @@ function barChart(svg, varName) {
         .text(varName);
 }
 
-function hoverBar(data){
-     var barsvg = d3.select("#hoverBar").append("svg")
-        .attr("width", width-10)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
 
-      var bar = barsvg.selectAll(".bar")
-        .data(data)
-        .enter().append("rect")
-        .attr("x", function(d,i){
-            return i;
-        })
-        .attr("width", 2)
-        .attr("y", function(d, i){
-            return 5 * i;
-        })
-        .attr("height", function(d, i) {
-             return 5 * i;
-        })
-        .attr("fill", function(d){
-                
-        })
-        .attr("fill-opacity", 0.7);
-
-        return bar;
-}
 
 function updateChartsAscending(){
     var stepX = (width-50)/globalData.length;
@@ -288,6 +262,67 @@ function updateChartsReset(){
     barChart(svg2);
     barChart(svg3);
     barChart(svg4);
+
+}
+
+function roseChart(dataVal){
+    var data = [];
+    data.push(dataVal);
+    var rose = Chart.rose(),
+        height = 400,
+        causes = vars,
+        labels = ['53KO', 'CAS', 'RAS', 'WT'];
+
+    var dataObj = [];
+    data.forEach( function(d,i) {
+        var obj1 = {"val": +d[vars[0]], "label": labels[0]};
+        dataObj.push(obj1);
+        var obj2 = {"val": +d[vars[1]], "label": labels[1]};
+        dataObj.push(obj2);
+        var obj3 = {"val": +d[vars[2]], "label": labels[2]};
+        dataObj.push(obj3);
+        var obj4 = {"val": +d[vars[3]], "label": labels[3]};
+        dataObj.push(obj4);
+    } );
+    data = dataObj;
+    // Get the maximum value:
+    var maxVal = finalHighVal;
+    console.log(maxVal)
+    // Where the maximum value gives us the maximum radius:
+    var maxRadius = Math.sqrt(maxVal * 10 / Math.PI);
+
+    // Append a new figure to the DOM:
+    figure = d3.select( 'body' )
+        .append( 'figure' );
+
+
+    // Update the chart generator settings:
+    rose.legend( causes )
+        .width( width )
+        .height( height )
+        .delay( 0 )
+        .duration( 500 )
+        .domain( [0, maxRadius] )
+        .angle( function(d,i) {  return i; } )
+        .area( function(d, i) { return [d.val]; } );
+
+    // Bind the data and generate a new chart:
+    figure.datum( data )
+        .attr('class', 'chart figure1')
+        .call( rose );
+
+// <<<<<<< Updated upstream
+    // Append a new figure to the DOM:
+    figure = d3.select( 'body' )
+        .append( 'figure' );
+
+
+    // Update the chart generator settings:
+    rose.width( width )
+        .delay( 100 );
+    // });
+// =======
+// >>>>>>> Stashed changes
 
 }
 

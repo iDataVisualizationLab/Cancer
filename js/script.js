@@ -167,15 +167,16 @@ Chart.rose = function() {
 
 		// Append labels to the wedgeGroups:
 		console.log(d3.selectAll('.label-path'));
-		var numLabels = 0;
+		var numLabels = 4;
 		
 		wedgeGroups.selectAll('.label-path')
 			.data( function(d,i) { 
+				console.log(d)
 				return [
 					{
 						'index': i,
 						'angle': d.angle,
-						'radius': d3.max( d.radius.concat( [23] ) )
+						'radius': d.radius[i]
 					}
 				];
 			} )
