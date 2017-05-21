@@ -184,7 +184,7 @@ function barChart(svg, varName) {
              hoverBar(d);
              hBCount++;
              var hoverData = d3.select("#hoverBar"); 
-             tipContent = tipContent + hoverData._groups[0][0].innerHTML;
+             tipContent = tipContent  + hoverData._groups[0][0].innerHTML;
              tip1.show(tipContent, this);
 
             mouseOver(i);
@@ -265,6 +265,7 @@ function mouseOver(index) {
 function hoverBar(data){
     var height = 100;
      var barsvg = d3.select("#hoverBar").append("svg")
+     .attr("class", "mouseOverBar")
         .attr("width", 200)
         .attr("height", 200)
         .append("g")
