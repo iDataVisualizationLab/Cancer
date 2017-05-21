@@ -23,9 +23,6 @@ var lineColor = d3.scaleLinear()
 
 var typeColor = d3.scaleOrdinal(d3.schemeCategory10);
 
-
-
-
 var tip1 = d3.tip()
     .attr('class', 'd3-tip d3-tooltip')
     .direction('e')
@@ -36,6 +33,7 @@ var tip1 = d3.tip()
     });
 
 var svg1,svg2,svg3,svg4,svgRight1, svgRight2, svgRight3, svgRight4;
+var svgRights = [];
 var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
 var avgVars = ["avgP53","avgCAS","avgRAS","avgWT"];
 var bars={};
@@ -85,32 +83,38 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
+    svgRight1 = d3.select("#right1").append("svg")
+        .attr("width", width-10)
+        .attr("height", height+45)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 10 + ")");
+    svgRight2 = d3.select("#right2").append("svg")
+        .attr("width", width-10)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 10 + ")");
+    svgRight3 = d3.select("#right3").append("svg")
+        .attr("width", width-10)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 10 + ")");
+    svgRight4 = d3.select("#right4").append("svg")
+        .attr("width", width-10)
+        .attr("height", height+23)
+        .append("g")
+        .attr("transform", "translate(" + 30 + "," + 10 + ")");
+    svgRights.push(svgRight1);
+    svgRights.push(svgRight2);
+    svgRights.push(svgRight3);
+    svgRights.push(svgRight4);
+
     barChart(svg1, vars[0]);
     barChart(svg2, vars[1]);
     barChart(svg3, vars[2]);
     barChart(svg4, vars[3]);
 
 
-    svgRight1 = d3.select("#right1").append("svg")
-        .attr("width", width-10)
-        .attr("height", height+45)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
-    svgRight2 = d3.select("#right2").append("svg")
-        .attr("width", width-10)
-        .attr("height", height+23)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
-    svgRight3 = d3.select("#right3").append("svg")
-        .attr("width", width-10)
-        .attr("height", height+23)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
-    svgRight4 = d3.select("#right4").append("svg")
-        .attr("width", width-10)
-        .attr("height", height+23)
-        .append("g")
-        .attr("transform", "translate(" + 30 + "," + 0 + ")");
+
 
 console.log(data);
 });
@@ -153,6 +157,16 @@ function barChart(svg, varName) {
     var yAxis = d3.axisLeft()
         .scale(y2)
         .ticks(5)
+
+    // Draw the top and the bottom
+    for (var v = 0; v < 4; v++) {
+        globalData.sort(function(a, b) {   // Order by average P53 by default
+            return b[vars[v]] - a[vars[v]];
+        });
+
+        svgRights[v].selectAll("*").remove();;
+        addBarChart(globalData[0],svgRights[v], 20, 20);
+    }
 
 
     globalData.sort(function(a, b) {   // Order by average P53 by default
@@ -200,11 +214,13 @@ function barChart(svg, varName) {
                 .attr("height", 200)
                 .append("g")
                 .attr("transform", "translate(" + 30 + "," + 0 + ")");
-             hoverBar(d,barsvg);
+
+             addBarChart(d,barsvg,0,0);
              hBCount++;
              var hoverData = d3.select("#hoverBar"); 
              tipContent = tipContent  + hoverData._groups[0][0].innerHTML;
              tip1.show(tipContent, this);
+
 
             mouseOver(i);
         })
@@ -281,7 +297,7 @@ function mouseOver(index) {
     }
 }
 
-function hoverBar(data,barsvg){
+function addBarChart(data,barsvg,xx, yy){
     var height = 100;
      var barsVal = [];
         barsVal[0] = +data['RAS/CAS'];
@@ -292,8 +308,7 @@ function hoverBar(data,barsvg){
   lineColor.domain([finalLowVal, finalHighVal]);
     var x = d3.scaleLinear()
         .domain([0,1])
-        .range([0, width-80]);
-
+        .range([0, height]);
     var y = d3.scaleLinear()
         .domain([finalLowVal, finalHighVal])
         .range([-height, height]);
@@ -316,9 +331,9 @@ function hoverBar(data,barsvg){
         .enter().append("rect")
         .attr("x", function(d,i){
             console.log(d)
-            return i*4;
+            return i*20;
         })
-        .attr("width", 4)
+        .attr("width", 19)
         .attr("y", function(d){
             if (d>=0)
                 return height - y(d);
@@ -334,7 +349,7 @@ function hoverBar(data,barsvg){
         .attr("fill", function(d,i){
                 return typeColor(vars[i]);
         })
-        .attr("fill-opacity", 0.7);
+        .attr("fill-opacity", 0.8);
 
     // add the x axis and x-label
     barsvg.append("g")
