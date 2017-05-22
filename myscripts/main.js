@@ -364,7 +364,7 @@ function addBarChart(data,barsvg,varIndex,str){
         .data(barsVal)
         .enter().append("rect")
         .attr("x", function(d,i){
-            console.log(d)
+            // console.log(d)
             return 2+i*25;
         })
         .attr("width", 24)
@@ -465,8 +465,8 @@ function updateChartsReset(varName){
 }
 function scatterPlot(){
     var data = globalData;
-    var width = 960,
-        size = 230,
+    var width = 700,
+        size = 115,
         padding = 20;
 
     var x = d3.scaleLinear()
@@ -485,14 +485,15 @@ function scatterPlot(){
 
 
       var domainByTrait = {},
-          traits = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"],
+          traits = ["avgP53","avgCAS","avgRAS","avgWT","RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"],
           n = traits.length;
 
           console.log(traits)
 
       traits.forEach(function(trait) {
         console.log(d3.extent(data, function(d) { return d[trait]; }))
-        domainByTrait[trait] = [finalLowVal, finalHighVal];
+        domainByTrait[trait] = [finalLowVal, 150000];
+        // domainByTrait[trait] = d3.extent(data, function(d) { return d[trait]; });
       });
 
       xAxis.tickSize(size * n);
@@ -534,10 +535,9 @@ function scatterPlot(){
           .text(function(d) { return d.x; });
 
       // cell.call(brush);
-    svg.call(tip1);
+        svg.call(tip1);
       function plot(p) {
         var cell = d3.select(this);
-
         x.domain(domainByTrait[p.x]);
         y.domain(domainByTrait[p.y]);
 
@@ -553,11 +553,11 @@ function scatterPlot(){
           .enter().append("circle")
             .attr("cx", function(d) { return x(d[p.x]); })
             .attr("cy", function(d) { return y(d[p.y]); })
-            .attr("r", 4)
-            .style("fill", function(d,i) { 
-              // console.log(d);
-              return typeColor(i); })
-               .on('mouseover', function(d,i){
+            .attr("r", 2)
+            // .style("fill", function(d,i) { 
+            //   // console.log(d);
+            //   return "#000"; })
+            .on('mouseover', function(d,i){
                 var tipContent = '<p><b>Name: </b>' + d.Name + '</p><table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>';
                 tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol + '</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr></table>";
                     if(hBCount!=0){
