@@ -1,4 +1,48 @@
-   .d3-tip {
+       body {font-family: "Lato", sans-serif;}
+
+/* Style the tab */
+div.tab {
+    overflow: hidden;
+    /*border: 1px solid #ccc;*/
+    /*background-color: #f1f1f1;*/
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 5px 6px;
+    transition: 0.3s;
+    font-size: 13px;
+    background: #ccc;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #1f77b4;
+    color: #fff;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #fff;
+    color: black;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 6px;
+    /*border: 1px solid #ccc;*/
+    border-top: none;
+}
+
+      .d3-tip {
       line-height: 1;
       padding: 12px;
       color: #000;
@@ -14,6 +58,7 @@
       .bar rect:hover{
       fill: rgba(0,0,0,.8);
       }
+
       text{
         font-size: 12px;
       }
@@ -80,26 +125,26 @@
       margin-bottom: 10px;
   }
 
-.d3-tip table { border-collapse: collapse; 
+table { border-collapse: collapse; 
 background: #aaa;
 }
-.d3-tip tr { display: block; float: left; 
+tr { display: block; float: left; 
   margin-left: 0px;
   margin-right: 0px;
   padding-left: 0px;
   padding-right: 0px;
   }
-.d3-tip th, td { display: block; 
+th, td { display: block; 
   text-align: left;
   /*border: 1px solid black; */
   background: #fff; margin-bottom: 1px;
   padding: 5px;
 
 }
-.d3-tip th{
+th{
   margin-right: 1px;
 }
-.d3-tip tr,td{
+tr,td{
   text-align: right;
 }
 .disease {
@@ -136,3 +181,53 @@ select{
   margin-bottom: 5px;
   margin-top: 5px;
 }
+
+svg {
+  font: 10px sans-serif;
+  padding: 10px;
+}
+
+#sPlot .axis,
+.frame {
+  shape-rendering: crispEdges;
+}
+
+#sPlot .axis line {
+  stroke: #ddd;
+}
+
+#sPlot .axis path {
+  display: none;
+}
+
+.cell text {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.frame {
+  fill: none;
+  stroke: #aaa;
+}
+
+circle {
+  fill-opacity: .7;
+}
+
+circle.hidden {
+  fill: #ccc !important;
+}
+
+.extent {
+  fill: #000;
+  fill-opacity: .125;
+  stroke: #fff;
+}
+.scatterSvg{
+  background: #fff;
+}
+      .axis path, .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+      }

@@ -3,158 +3,19 @@
   <body style="background-color:#ddd;">
     <title>Cancer charts</title>
     <style>
-      .d3-tip {
-      line-height: 1;
-      padding: 12px;
-      color: #000;
-      border-radius: 2px;
-      font-size: 13px;
-      margin-top: 0px;
-            }
-
-      .bar rect {
-      fill: steelblue;
-      shape-rendering: crispEdges;
-      }
-      .bar rect:hover{
-      fill: rgba(0,0,0,.8);
-      }
-      .axis path, .axis line {
-      fill: none;
-      stroke: #000;
-      shape-rendering: crispEdges;
-      }
-      text{
-        font-size: 12px;
-      }
-        #tiptable tr{
-    /*margin-bottom: 1px;*/
-    /*padding-left: 5px;*/
-    /*padding-right: 5px;*/
-    /*border-bottom: 1px solid #777;*/
-  }
-    #tiptable tr td{
-    background: #fff;
-    /*margin-bottom: 1px;*/
-    /*margin-right: 1px;*/
-    /*border-right: 1px solid #ccc;*/
-  }
-  .title{
-    text-align: center;
-    width: 600px;
-    padding: 0px;
-    margin: 0px;
-    font-size: 16px;
-  }
-  .titleRight{
-      text-align: center;
-      width: 600px;
-      padding: 0px;
-      margin: 0px;
-      font-size: 14px;
-      font-family: "Times New Roman";
-  }
-    .d3-tooltip{
-    background: #ccc;
-    border-radius: 5px;
-    padding: 8px;
-    border: .6px solid black;
-    margin-top: 120px;
-  }
-  .charts{
-    width: 700px;
-    float: left;
-    margin-right: 20px;
-  }
-  #column1, #column2, #column3, #column4{
-    border: 1px solid #555;
-    border-radius: 5px;
-    background: #fff;
-    margin-bottom: 10px;
-  }
-
-  .rightPanel{
-      width: 405px;
-      float: left;
-  }
-
-  .right{
-      width: 400px;
-      float: left;
-      margin-right: 20px;
-  }
-  #right1, #right2, #right3, #right4{
-      border: 1px solid #555;
-      border-radius: 5px;
-      background: #fff;
-      margin-bottom: 10px;
-  }
-
-table { border-collapse: collapse; 
-background: #aaa;
-}
-tr { display: block; float: left; 
-  margin-left: 0px;
-  margin-right: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  }
-th, td { display: block; 
-  text-align: left;
-  /*border: 1px solid black; */
-  background: #fff; margin-bottom: 1px;
-  padding: 5px;
-
-}
-th{
-  margin-right: 1px;
-}
-tr,td{
-  text-align: right;
-}
-.disease {
-  fill: rgb(198, 226, 255);
-}
-
-.other {
-  fill: rgb(50,50,50);
-}
-
-.wounds {
-  fill: rgb(252,112,147);
-}
-#tiptable{
-  float: left;
-  margin-right: 10px;
-}
-#hoverBar{
-  float: right;
-  background: #fff;
-}
-#hoverBar svg{
-  background: #fff;
-}
-button{
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-.mouseOverBar{
-  background: #fff;
-  padding: 10px;
-}
-select{
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-
     </style>
     <script src="js/jquery.2.1.1.min.js"></script>
     <script src="./js/script.js"></script>
     <script src="./js/d3.v4.js"></script>
     <script src="./js/d3.v4.tip.js"></script>
     <script src="myscripts/main.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles/style.css" />
 
-
+<div class="tab">
+  <button class="tablinks active" onclick="openTab(event, 'home')">Bar Charts</button>
+  <button class="tablinks" onclick="openTab(event, 'sPlot')">Scatter Plot</button>
+</div>
+  <div id="home" class="tabcontent">  
     <div class="charts">
     <select onchange="updateChartsReset(this.value)">
     <option value="Choose" selected="selected">Choose</option>
@@ -163,7 +24,6 @@ select{
     <option value="avgRAS" >Order by P53KO-O-RAS</option>
     <option value="avgWT" >Order by WT</option>
     </select>
-
         <div id="column1" class="graph">
             <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
            <button onclick="updateChartsDescending(vars[0])">Descending</button>
@@ -194,40 +54,29 @@ select{
 
     <div id="multi-plane-representation" style="margin-left: 620px;">
     </div>
+  </div>
+  <div id="sPlot" class="tabcontent">
+    <h3>Scatter Plots</h3>
+  </div>
 
 
-<!--
-    <script src="js/lodash.js"></script>
-
-    <script src="js/fisheye.js"></script> d
-
-
-    <script src="scripts/util.js"></script>
-    <script src="scripts/genomics.js"></script>
-    <script src="scripts/tooltip.js"></script>
-    <script src="scripts/stacking.js"></script>
-    <script src="scripts/TimeArcsViz.js"></script>
-    <script src="scripts/TimeArcsPublications.js"></script>
-    <script src="scripts/matrix.js"></script>
-    <script src="scripts/sliderRelationship.js"></script>
-    <script src="scripts/streamGraph.js"></script>
-
-
-    <script src="scripts/forceDirected.js"></script>
-    <script src="scripts/cluster.network.js"></script>
-
-
-    <script src="scripts/jLouvain.js"></script>
-    <script src="scripts/context.networks.js"></script>
-
-
-    <script src="scripts/main.js"></script>
-
-
-    <script type='text/javascript' src="js/jquery-ui.1.11.0.min.js"> </script>
-    <link href="styles/jquery-ui.css" rel="stylesheet" type="text/css" />
-
-    <script src="scripts/searchBox.js"></script> -->
+<script>
+document.getElementById("home").style.display = "block";
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
+     
 
   </body>
 </html>

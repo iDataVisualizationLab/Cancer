@@ -137,7 +137,7 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
     barChart(svg3, vars[2]);
     barChart(svg4, vars[3]);
 
-
+    scatterPlot();
 
 
 console.log(data);
@@ -463,4 +463,158 @@ function updateChartsReset(varName){
             });
     }
 }
+function scatterPlot(){
+var width = 960,
+    size = 230,
+    padding = 20;
 
+var x = d3.scaleLinear()
+    .range([padding / 2, size - padding / 2]);
+
+var y = d3.scaleLinear()
+    .range([size - padding / 2, padding / 2]);
+
+var xAxis = d3.axisBottom()
+    .scale(x)
+    .ticks(6);
+
+var yAxis = d3.axisLeft()
+    .scale(y)
+    .ticks(6);
+data = globalData;
+
+console.log(globalData);
+
+  var domainByTrait = {},
+      traits = ["avgP53","avgCAS","avgRAS","avgWT"],
+      n = traits.length;
+
+      console.log(traits)
+
+  traits.forEach(function(trait) {
+    domainByTrait[trait] = d3.extent(data, function(d) { return d[trait]; });
+  });
+
+  xAxis.tickSize(size * n);
+  yAxis.tickSize(-size * n);
+
+  var svg = d3.select("#sPlot").append("svg")
+    .attr("class", "scatterSvg")
+      .attr("width", size * n + padding)
+      .attr("height", size * n + padding)
+    .append("g")
+      .attr("transform", "translate(" + padding + "," + padding / 2 + ")");
+
+  svg.selectAll(".x.axis")
+      .data(traits)
+    .enter().append("g")
+      .attr("class", "x axis")
+      .attr("transform", function(d, i) { return "translate(" + (n - i - 1) * size + ",0)"; })
+      .each(function(d) { x.domain(domainByTrait[d]); d3.select(this).call(xAxis); });
+
+  svg.selectAll(".y.axis")
+      .data(traits)
+    .enter().append("g")
+      .attr("class", "y axis")
+      .attr("transform", function(d, i) { return "translate(0," + i * size + ")"; })
+      .each(function(d) { y.domain(domainByTrait[d]); d3.select(this).call(yAxis); });
+
+  var cell = svg.selectAll(".cell")
+      .data(cross(traits, traits))
+    .enter().append("g")
+      .attr("class", "cell")
+      .attr("transform", function(d) { return "translate(" + (n - d.i - 1) * size + "," + d.j * size + ")"; })
+      .each(plot);
+
+  // Titles for the diagonal.
+  cell.filter(function(d) { return d.i === d.j; }).append("text")
+      .attr("x", padding)
+      .attr("y", padding)
+      .attr("dy", ".71em")
+      .text(function(d) { return d.x; });
+
+  // cell.call(brush);
+svg.call(tip1);
+  function plot(p) {
+    var cell = d3.select(this);
+
+    x.domain(domainByTrait[p.x]);
+    y.domain(domainByTrait[p.y]);
+
+    cell.append("rect")
+        .attr("class", "frame")
+        .attr("x", padding / 2)
+        .attr("y", padding / 2)
+        .attr("width", size - padding)
+        .attr("height", size - padding);
+
+    cell.selectAll("circle")
+        .data(data)
+      .enter().append("circle")
+        .attr("cx", function(d) { return x(d[p.x]); })
+        .attr("cy", function(d) { return y(d[p.y]); })
+        .attr("r", 4)
+        .style("fill", function(d,i) { 
+          // console.log(d);
+          return typeColor(i); })
+           .on('mouseover', function(d,i){
+            var tipContent = '<p><b>Name: </b>' + d.Name + '</p><table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>';
+            tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol + '</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr></table>";
+                if(hBCount!=0){
+                     d3.select("#hoverBar svg").remove();
+                     hBCount++;
+                 }
+            var barsvg = d3.select("#hoverBar").append("svg")
+                 .attr("class", "mouseOverBar")
+                .attr("width", 200)
+                .attr("height", 200)
+                .append("g")
+                .attr("transform", "translate(" + 30 + "," + 0 + ")");
+
+             addBarChart(d,barsvg);
+             hBCount++;
+             var hoverData = d3.select("#hoverBar"); 
+             tipContent = tipContent  + hoverData._groups[0][0].innerHTML;
+             tip1.show(tipContent, this);
+            d3.select("#hoverBar svg").remove();
+        })
+        .on('mouseout', function(d){
+            tip1.hide();
+            d3.select("#hoverBar svg").remove();
+        })
+
+  }
+
+  var brushCell;
+
+  // Clear the previously-active brush, if any.
+  function brushstart(p) {
+    if (brushCell !== this) {
+      d3.select(brushCell).call(brush.clear());
+      x.domain(domainByTrait[p.x]);
+      y.domain(domainByTrait[p.y]);
+      brushCell = this;
+    }
+  }
+
+  // Highlight the selected circles.
+  function brushmove(p) {
+    var e = brush.extent();
+    svg.selectAll("circle").classed("hidden", function(d) {
+      return e[0][0] > d[p.x] || d[p.x] > e[1][0]
+          || e[0][1] > d[p.y] || d[p.y] > e[1][1];
+    });
+  }
+
+  // If the brush is empty, select all circles.
+  function brushend() {
+    if (!brush) svg.selectAll(".hidden").classed("hidden", false);
+  }
+// });
+
+function cross(a, b) {
+  var c = [], n = a.length, m = b.length, i, j;
+  for (i = -1; ++i < n;) for (j = -1; ++j < m;) c.push({x: a[i], i: i, y: b[j], j: j});
+  return c;
+}
+}
