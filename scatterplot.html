@@ -89,9 +89,9 @@ d3.csv("data/flowers.csv", function(error, data) {
   yAxis.tickSize(-size * n);
 
   var brush = d3.brushX()
-      .on("brushstart", brushstart)
+      .on("brush start", brushstart)
       .on("brush", brushmove)
-      .on("brushend", brushend);
+      .on("brush end", brushend);
 
   var svg = d3.select("body").append("svg")
       .attr("width", size * n + padding)
@@ -174,7 +174,7 @@ d3.csv("data/flowers.csv", function(error, data) {
 
   // If the brush is empty, select all circles.
   function brushend() {
-    if (brush.empty()) svg.selectAll(".hidden").classed("hidden", false);
+    if (!brush) svg.selectAll(".hidden").classed("hidden", false);
   }
 });
 
