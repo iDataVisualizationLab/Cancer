@@ -1,0 +1,138 @@
+   .d3-tip {
+      line-height: 1;
+      padding: 12px;
+      color: #000;
+      border-radius: 2px;
+      font-size: 13px;
+      margin-top: 0px;
+            }
+
+      .bar rect {
+      fill: steelblue;
+      shape-rendering: crispEdges;
+      }
+      .bar rect:hover{
+      fill: rgba(0,0,0,.8);
+      }
+      text{
+        font-size: 12px;
+      }
+        #tiptable tr{
+    /*margin-bottom: 1px;*/
+    /*padding-left: 5px;*/
+    /*padding-right: 5px;*/
+    /*border-bottom: 1px solid #777;*/
+  }
+    #tiptable tr td{
+    background: #fff;
+    /*margin-bottom: 1px;*/
+    /*margin-right: 1px;*/
+    /*border-right: 1px solid #ccc;*/
+  }
+  .title{
+    text-align: center;
+    width: 600px;
+    padding: 0px;
+    margin: 0px;
+    font-size: 16px;
+  }
+  .titleRight{
+      text-align: center;
+      width: 600px;
+      padding: 0px;
+      margin: 0px;
+      font-size: 14px;
+      font-family: "Times New Roman";
+  }
+    .d3-tooltip{
+    background: #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    border: .6px solid black;
+    margin-top: 120px;
+  }
+  .charts{
+    width: 700px;
+    float: left;
+    margin-right: 20px;
+  }
+  #column1, #column2, #column3, #column4{
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: #fff;
+    margin-bottom: 10px;
+  }
+
+  .rightPanel{
+      width: 405px;
+      float: left;
+  }
+
+  .right{
+      width: 400px;
+      float: left;
+      margin-right: 20px;
+  }
+  #right1, #right2, #right3, #right4{
+      border: 1px solid #555;
+      border-radius: 5px;
+      background: #fff;
+      margin-bottom: 10px;
+  }
+
+.d3-tip table { border-collapse: collapse; 
+background: #aaa;
+}
+.d3-tip tr { display: block; float: left; 
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  }
+.d3-tip th, td { display: block; 
+  text-align: left;
+  /*border: 1px solid black; */
+  background: #fff; margin-bottom: 1px;
+  padding: 5px;
+
+}
+.d3-tip th{
+  margin-right: 1px;
+}
+.d3-tip tr,td{
+  text-align: right;
+}
+.disease {
+  fill: rgb(198, 226, 255);
+}
+
+.other {
+  fill: rgb(50,50,50);
+}
+
+.wounds {
+  fill: rgb(252,112,147);
+}
+#tiptable{
+  float: left;
+  margin-right: 10px;
+}
+#hoverBar{
+  float: right;
+  background: #fff;
+}
+#hoverBar svg{
+  background: #fff;
+}
+button{
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.mouseOverBar{
+  background: #fff;
+  padding: 10px;
+}
+select{
+  margin-bottom: 5px;
+  margin-top: 5px;
+}

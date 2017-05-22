@@ -52,6 +52,8 @@ circle.hidden {
     <script src="./js/d3.v4.js"></script>
     <script src="./js/d3.v4.tip.js"></script>
     <script src="myscripts/main.js"></script>
+    <style type="text/css"></style>
+   <link rel="stylesheet" type="text/css" href="styles/style.css" />
 <script>
 
 var width = 960,
@@ -71,15 +73,52 @@ var xAxis = d3.axisBottom()
 var yAxis = d3.axisLeft()
     .scale(y)
     .ticks(6);
+    var globalData;
+var vars = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"];
+var typeColor = d3.scaleOrdinal(d3.schemeCategory10);
 
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+var tip = d3.tip()
+    .attr('class', 'd3-tip d3-tooltip')
+    .direction('e')
+    .offset([0, 120])
+    .html(function(d) {
+        return d;
+    });
 
-d3.csv("data/flowers.csv", function(error, data) {
-  if (error) throw error;
+// data = globalData;
+// d3.csv("data/flowers.csv", function(error, data) {
+//   if (error) throw error;
+d3.csv("data/DATA_RKO2.csv", function(error, data) {
+    var i = 1;
+    globalData = data.filter(function(d) {
+        d.col1 = +d["P53KO-O1"];
+        d.col2 = +d["p53KO-O2"];
+        d.avgP53 = (d.col1+d.col2)/2;
+        d.col3 = +d["p53KO-O-CAS1"];
+        d.col4 = +d["p53KO-O-CAS2"];
+        d.avgCAS = (d.col3+d.col4)/2;
+        d.col5 = +d["p53KO-O-RAS1"];
+        d.col6 = +d["p53KO-O-RAS2"];
+        d.avgRAS = (d.col5+d.col6)/2;
+        d.col7 = +d["WT-O1"];
+        d.col8 = +d["WT-O2"];
+        d.avgWT = (d.col7+d.col8)/2;
+        d.id = i++;
 
+        var diff = 0.75;
+        return  (d.avgP53+d.avgCAS+d.avgRAS+d.avgWT>500)
+            && Math.abs(d[vars[0]])>diff
+            && Math.abs(d[vars[1]])>diff
+            && Math.abs(d[vars[2]])>diff
+            && Math.abs(d[vars[3]])>diff;
+    });
+data = globalData;
+console.log(data);
   var domainByTrait = {},
-      traits = d3.keys(data[0]).filter(function(d) { return d !== "species"; }),
+      traits = ["avgP53","avgCAS","avgRAS","avgWT"],
       n = traits.length;
+
+      console.log(traits)
 
   traits.forEach(function(trait) {
     domainByTrait[trait] = d3.extent(data, function(d) { return d[trait]; });
@@ -88,10 +127,10 @@ d3.csv("data/flowers.csv", function(error, data) {
   xAxis.tickSize(size * n);
   yAxis.tickSize(-size * n);
 
-  var brush = d3.brushX()
-      .on("brush start", brushstart)
-      .on("brush", brushmove)
-      .on("brush end", brushend);
+  // var brush = d3.brushX()
+  //     .on("brush start", brushstart)
+  //     .on("brush", brushmove)
+  //     .on("brush end", brushend);
 
   var svg = d3.select("body").append("svg")
       .attr("width", size * n + padding)
@@ -127,8 +166,8 @@ d3.csv("data/flowers.csv", function(error, data) {
       .attr("dy", ".71em")
       .text(function(d) { return d.x; });
 
-  cell.call(brush);
-
+  // cell.call(brush);
+svg.call(tip);
   function plot(p) {
     var cell = d3.select(this);
 
@@ -148,7 +187,20 @@ d3.csv("data/flowers.csv", function(error, data) {
         .attr("cx", function(d) { return x(d[p.x]); })
         .attr("cy", function(d) { return y(d[p.y]); })
         .attr("r", 4)
-        .style("fill", function(d) { return color(d.species); });
+        .style("fill", function(d,i) { 
+          // console.log(d);
+          return typeColor(i); })
+           .on('mouseover', function(d,i){
+            var tipContent = '<p><b>Name: </b>' + d.Name + '</p><table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>';
+            tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol + '</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr></table>";
+
+             tip.show(tipContent, this);
+
+        })
+        .on('mouseout', function(d){
+            tip.hide();
+        })
+
   }
 
   var brushCell;
