@@ -95,7 +95,7 @@ div.tab button.active {
     margin-top: 120px;
   }
   .charts{
-    width: 700px;
+    width: 730px;
     float: left;
     margin-right: 20px;
   }
@@ -107,12 +107,12 @@ div.tab button.active {
   }
 
   .rightPanel{
-      width: 405px;
+      width: 475px;
       float: left;
   }
 
   .right{
-      width: 400px;
+      /*width: 400px;*/
       float: left;
       margin-right: 20px;
   }
@@ -224,8 +224,11 @@ circle.hidden {
 .scatterSvg{
   background: #fff;
 }
-      .axis path, .axis line {
-      fill: none;
-      stroke: #000;
-      shape-rendering: crispEdges;
-      }
+.axis path, .axis line {
+   fill: none;
+   stroke: #000;
+  shape-rendering: crispEdges;
+ }
+ #sPlot{
+  background: #fff;
+ }

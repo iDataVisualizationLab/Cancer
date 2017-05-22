@@ -465,15 +465,26 @@ function updateChartsReset(varName){
 }
 function scatterPlot(){
     var data = globalData;
-    var width = 700,
-        size = 115,
+    var width = 1500,
+        size = 150,
         padding = 20;
 
     var x = d3.scaleLinear()
         .range([padding / 2, size - padding / 2]);
+        // .range([0,1])
 
     var y = d3.scaleLinear()
         .range([size - padding / 2, padding / 2]);
+        // .range([0,1])
+
+
+    var x1 = d3.scaleLinear()
+        .range([padding / 2, size - padding / 2]);
+        // .range([-1,1])
+
+    var y1 = d3.scaleLinear()
+        .range([size - padding / 2, padding / 2]);
+        // .range([-1,1])
 
     var xAxis = d3.axisBottom()
         .scale(x)
@@ -485,15 +496,23 @@ function scatterPlot(){
 
 
       var domainByTrait = {},
-          traits = ["avgP53","avgCAS","avgRAS","avgWT","RAS/CAS","RAS/WT","P53KO/WT","CAS/WT"],
+          traits = ["RAS/CAS","RAS/WT","P53KO/WT","CAS/WT","avgP53","avgCAS","avgRAS","avgWT"],
+              // traits = ["avgP53","avgCAS","avgRAS","avgWT"],
+
           n = traits.length;
 
           console.log(traits)
-
+     var count = 1;
       traits.forEach(function(trait) {
         console.log(d3.extent(data, function(d) { return d[trait]; }))
-        domainByTrait[trait] = [finalLowVal, 150000];
-        // domainByTrait[trait] = d3.extent(data, function(d) { return d[trait]; });
+        // domainByTrait[trait] = [finalLowVal, finalHighVal];
+        if(count>4)
+         domainByTrait[trait] = d3.extent(data, function(d) { return d[trait]; });
+        else
+        {
+            domainByTrait[trait] = [finalLowVal, finalHighVal];
+            count++;
+        }
       });
 
       xAxis.tickSize(size * n);
@@ -501,10 +520,10 @@ function scatterPlot(){
 
       var svg = d3.select("#sPlot").append("svg")
         .attr("class", "scatterSvg")
-          .attr("width", size * n + padding)
-          .attr("height", size * n + padding)
+          .attr("width", size * (n+.5) + padding)
+          .attr("height", size * (n+.5) + padding)
         .append("g")
-          .attr("transform", "translate(" + padding + "," + padding / 2 + ")");
+          .attr("transform", "translate(" + 50 + "," + padding / 2 + ")");
 
       svg.selectAll(".x.axis")
           .data(traits)
@@ -538,8 +557,11 @@ function scatterPlot(){
         svg.call(tip1);
       function plot(p) {
         var cell = d3.select(this);
+        // console.log(p)
         x.domain(domainByTrait[p.x]);
         y.domain(domainByTrait[p.y]);
+        x1.domain(domainByTrait[p.x]);
+        y1.domain(domainByTrait[p.y]);
 
         cell.append("rect")
             .attr("class", "frame")
@@ -551,8 +573,12 @@ function scatterPlot(){
         cell.selectAll("circle")
             .data(data)
           .enter().append("circle")
-            .attr("cx", function(d) { return x(d[p.x]); })
-            .attr("cy", function(d) { return y(d[p.y]); })
+            .attr("cx", function(d) { 
+                // if(d[p.x] > finalHighVal)
+                return x(d[p.x]); })
+            .attr("cy", function(d) { 
+                // if(d[p.y] > finalHighVal)
+                return y(d[p.y]); })
             .attr("r", 2)
             // .style("fill", function(d,i) { 
             //   // console.log(d);
