@@ -13,7 +13,7 @@ var finalHighVal=0;
 var finalLowVal = 0;
 var hBCount = 0;
 
-var width =1000;
+var width =700;
 var height =205;
 
 
@@ -85,42 +85,42 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
     svgRight11 = d3.select("#right1").append("svg")
         .attr("width", 200)
-        .attr("height", height+45)
+        .attr("height", height+62)
         .append("g")
-        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+        .attr("transform", "translate(" + 30 + "," + 40 + ")");
     svgRight21 = d3.select("#right2").append("svg")
         .attr("width", 200)
-        .attr("height", height+23)
+        .attr("height", height+32)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 20 + ")");
     svgRight31 = d3.select("#right3").append("svg")
         .attr("width", 200)
-        .attr("height", height+23)
+        .attr("height", height+32)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 20 + ")");
     svgRight41 = d3.select("#right4").append("svg")
         .attr("width", 200)
-        .attr("height", height+23)
+        .attr("height", height+32)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 20 + ")");
     svgRight12 = d3.select("#right1").append("svg")
         .attr("width", 200)
-        .attr("height", height+45)
+        .attr("height", height+62)
         .append("g")
-        .attr("transform", "translate(" + 30 + "," + 20 + ")");
+        .attr("transform", "translate(" + 30 + "," + 40 + ")");
     svgRight22 = d3.select("#right2").append("svg")
         .attr("width", 200)
-        .attr("height", height+23)
+        .attr("height", height+32)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 20 + ")");
     svgRight32 = d3.select("#right3").append("svg")
         .attr("width", 200)
-        .attr("height", height+23)
+        .attr("height", height+32)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 20 + ")");
     svgRight42= d3.select("#right4").append("svg")
         .attr("width", 200)
-        .attr("height", height+23)
+        .attr("height", height+32)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 20 + ")");
     svgRights.push(svgRight11);
@@ -249,12 +249,12 @@ function barChart(svg, varName) {
                 .append("g")
                 .attr("transform", "translate(" + 30 + "," + 0 + ")");
 
-             addBarChart(d,barsvg,0,0);
+             addBarChart(d,barsvg);
              hBCount++;
              var hoverData = d3.select("#hoverBar"); 
              tipContent = tipContent  + hoverData._groups[0][0].innerHTML;
              tip1.show(tipContent, this);
-
+            d3.select("#hoverBar svg").remove();
 
             mouseOver(i);
         })
@@ -365,9 +365,9 @@ function addBarChart(data,barsvg,varIndex,str){
         .enter().append("rect")
         .attr("x", function(d,i){
             console.log(d)
-            return 2+i*20;
+            return 2+i*25;
         })
-        .attr("width", 19)
+        .attr("width", 24)
         .attr("y", function(d){
             if (d>=0)
                 return height - y(d);
@@ -398,12 +398,21 @@ function addBarChart(data,barsvg,varIndex,str){
         .attr("class", "y axis")
         .attr("transform", "translate(0,100)")
         .call(yAxis);
+    if (varIndex!=undefined){
+        barsvg.append("text")
+            .attr("class", "titleRight ")
+            .attr("y", 0)
+            .attr("x", 60)
+            .style("text-anchor", "middle")
+            .text(str+vars[varIndex]);
+    }
     barsvg.append("text")
         .attr("class", "titleRight ")
-        .attr("y", 0)
-        .attr("x", 50)
+        .attr("y", 200)
+        .attr("x", 60)
         .style("text-anchor", "middle")
-        .text(str+vars[varIndex]);
+        .text("Gene symbol="+data.symbol );
+
 }
 
 
