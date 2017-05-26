@@ -1,0 +1,203 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
+body {
+  font-size: 14px;
+  font-family: "sans-serif", Consolas, monaco, monospace;
+  margin: 0;
+  line-height: 1.45em;
+}
+a {
+  color: #454545;
+}
+a:hover {
+  color: #000;
+}
+ul {
+  margin: 0 20px;
+  padding: 0;
+}
+.dark {
+  background: #222;
+}
+#example {
+  min-height: 300px;
+  margin: 12px 0;
+}
+
+pre {
+  color: #444;
+  font-family: Ubuntu Mono, Monaco, monospace;
+  padding: 4px 8px;
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+}
+h1 small {
+  font-weight: normal;
+  font-size: 0.5em;
+}
+h3 {
+  margin-top: 40px;
+}
+.float {
+  float: left;
+}
+.centered {
+  text-align: center;
+}
+.hide {
+  display: none;
+}
+input {
+  font-size: 16px;
+}
+
+/* data table styles */
+  #grid { height: 500px; }
+  .row, .header { clear: left; font-size: 11px; line-height: 24px; height: 24px; }
+  .row:nth-child(odd) { background: rgba(0,0,0,0.05); }
+  .header { font-weight: bold; }
+  .cell { float: left; overflow: hidden; width: 120px; height: 30px; }
+  .col-0 { width: 120px; }
+
+
+/* parcoords styles */
+.parcoords > svg, .parcoords > canvas {
+  font: 11px "Source Code Pro", Consolas, monaco, monospace;
+  position: absolute;
+}
+.parcoords > canvas {
+  pointer-events: none;
+}
+
+.parcoords text.label {
+  cursor: default;
+}
+
+.parcoords rect.background {
+  fill: transparent;
+}
+.parcoords rect.background:hover {
+  fill: rgba(120,120,120,0.2);
+}
+.parcoords .resize rect {
+  fill: rgba(0,0,0,0.1);
+}
+.parcoords rect.extent {
+  fill: rgba(255,255,255,0.25);
+  stroke: rgba(0,0,0,0.6);
+}
+.parcoords .axis line, .parcoords .axis path {
+  fill: none;
+  stroke: #454545;
+  shape-rendering: crispEdges;
+}
+.parcoords canvas {
+  opacity: 1;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+.parcoords canvas.faded {
+  opacity: 0.25;
+}
+.parcoords {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Forced directed graph */
+
+
+.checkbox{
+padding:15px;	
+	
+}
+#container {
+  width: 100%;
+  height: 500px;
+  text-align: left;
+}
+
+#holders {
+  float: left;
+  width: 28%;
+}
+
+#clinicalHolder {
+  float:left;
+  width: 100%;
+  height: 300px;
+  border: 1px solid rgba(0,0,0, 1);
+  background-color: rgba(230,230,230, 1);
+}
+
+#proteinHolder {
+  width: 100%;
+  height: 650px;
+  border: 1px solid rgba(0,0,0, 1);
+  background-color: rgba(220,220,240, 1);
+}
+.filterArea {
+    width: 100%;
+    background: #ddd;
+    padding-top: 0px;
+    margin-top: 0px;
+    padding-bottom: 10px;
+}
+#selectBtn{
+  width: 70%;
+  float: left;
+}
+#study{
+float: left;
+width: 400px;
+text-align: left; 
+font-size: 13pt;
+  
+}
+#cancer_search{
+  width: 400px;
+}
+
+#genes{
+  width: 400px;
+  float: right;
+}
+#filterButton{
+  width: 25%;
+  margin-top: 10px;
+}
+#filterButton p{
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.graphArea{
+  width: 100%;
+}
+#cancer_bubble{
+  width: 28%;
+  float: left;
+}
+#geneforce{
+  width: 70%;
+  float: right;
+}
+h4{
+  font-weight: bold;
+  font-size: 16px;
+  padding-left: 20px;
+  float: left;
+}
+div{
+  padding: 0;
+  padding-top: 2px;
+  margin-top: 2px;
+  margin: auto;
+}
+p{
+  margin: 0;
+}

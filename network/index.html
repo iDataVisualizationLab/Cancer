@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    body {
+        overflow:hidden;
+        margin:0;
+    }
+
+    text {
+        font-family: sans-serif;
+        pointer-events: none;
+    }
+    div.tooltip {
+        position: absolute;
+        text-align: center;
+        width: 160px;
+        height: 28px;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        /*  pointer-events: none;	This line needs to be removed */
+
+    }
+</style>
+<script src="scripts/d3.v4.js"></script>
+<script src="scripts/underscore-min.js"></script>
+<!-- <script src="scripts/d3.geom.concaveHull.js"></script> -->
+
+<link rel="stylesheet" type="text/css" href="styles/default.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="styles/tipsy.css" media="screen"/>
+
+<!-- Include Twitter Bootstrap and jQuery: -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" type="text/css"/>
+<script type="text/javascript" src="bootstrap/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Include the plugin's CSS and JS: -->
+<script type="text/javascript" src="bootstrap/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="scripts/functions.js"></script>
+<link rel="stylesheet" href="bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="styles/style.css" media="screen"/>
+<script src="scripts/tipsy.js"></script>
+<script type="text/javascript">
+
+   // set the opacity to nil
+    $(document).ready(function () {
+        $('#slgenes').multiselect({
+          enableFiltering: true,
+            includeSelectAllOption: true,
+           maxHeight: 400
+        });
+
+        $('#cancerid').multiselect({
+            enableFiltering: true,
+            includeSelectAllOption: true,
+            maxHeight: 400
+        });
+
+    });
+    function arrayContainsArray(superset, subset) {
+        return subset.every(function (value) {
+            return (superset.indexOf(value) >= 0);
+        });
+    }
+
+</script>
+<body>
+<div id="container">
+
+    <div class="filterArea">
+      <div id="selectBtn">
+        <div id="study">
+        <div id="genes">
+            <div id="genesearch">                 
+            <h4>Select Genes: </h4>
+            <select id="slgenes" multiple >
+
+            </select>
+            </div>
+          </div>
+        </div>    
+    </div>
+    <div class="graphArea">
+         <div id="cancer_bubble">
+            <script>
+
+            </script>
+        </div>
+
+        <div id="geneforce"></div>       
+    </div>
+
+</div>
+</div>
+<div id ="bubbleset"> </div>
+<script>
+    DrawBublleChart();
+    UpdateGenesNetwork();
+ </script>
+
+</body>
