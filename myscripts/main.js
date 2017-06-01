@@ -234,10 +234,16 @@ function barChart(svg, varName) {
         })
         .attr("fill-opacity", 0.7)
         .on('mouseover', function(d,i){
-            var cancerstudies = [];
+           var ul = document.createElement("ul");
+           var index=1;
             data.children.forEach(function (c) {
                 if(c.protein.indexOf(d.symbol.toUpperCase())>=0){
-                    cancerstudies.push(c.name);
+                    var li = document.createElement("li");
+                    li.style.textShadow="1px 1px #000000";
+                    li.style.color = getColor(c.index);
+                    li.innerHTML=index+". "+c.name;
+                    ul.appendChild(li);
+                    index++;
                 }
             });
             var tipContent = '<p><b>Name: </b>' + d.Name + '</p><table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>';
@@ -256,7 +262,7 @@ function barChart(svg, varName) {
              addBarChart(d,barsvg);
              hBCount++;
              var hoverData = d3.select("#hoverBar");
-             tipContent = tipContent  + hoverData._groups[0][0].innerHTML+"<br><br> Cancer studies: "+ cancerstudies.toString();
+             tipContent = tipContent  + hoverData._groups[0][0].innerHTML+"<br><br> Related Cancers: "+ ul.outerHTML;
 
              tip1.show(tipContent, this);
             d3.select("#hoverBar svg").remove();
