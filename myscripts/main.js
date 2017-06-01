@@ -12,15 +12,18 @@ var termsData;
 var finalHighVal=0;
 var finalLowVal = 0;
 var hBCount = 0;
-var width =700;
-var height =205;
+var width =500;
+var height =180;
 
 
 var lineColor = d3.scaleLinear()
     .domain([0,100])
     .range([ '#f00','#00f'])
 
-var typeColor = d3.scaleOrdinal(d3.schemeCategory10);
+var typeColor = function(){
+    return "#000";
+}
+//d3.scaleOrdinal(d3.schemeCategory10);
 
 var tip1 = d3.tip()
     .attr('class', 'd3-tip d3-tooltip')
