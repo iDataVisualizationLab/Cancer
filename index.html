@@ -41,7 +41,8 @@
     <option value="avgRAS" >Order by P53KO-O-RAS</option>
     <option value="avgWT" >Order by WT</option>
     </select>
-        <input id="showrighPanel" type="checkbox" checked  /><label> Show lowest/highest graphs</label>
+        <input id="showrighPanel" type="checkbox"  /><label> Show lowest/highest graphs</label>
+        <button onclick="location.reload()">Reload page</button>
         <div id="column1" class="graph">
             <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
            <button onclick="updateChartsDescending(vars[0])">Descending</button>
@@ -64,7 +65,7 @@
          <div id="roseChart"></div>
          <div id="hoverBar"></div>
     </div>
-    <div class="rightPanel">
+    <div class="rightPanel" style="display: none;">
         <div id="right1" class="right"></div>
         <div id="right2" class="right"></div>
         <div id="right3" class="right"></div>
