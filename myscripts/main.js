@@ -144,7 +144,7 @@ var maxV;
 var minV;
 var ProteinScale = d3.scaleLinear()
     .domain([-7.8, 8.48])
-    .range([5, 30]);
+    .range([4, 15]);
 function barChart(svg, varName) {
     var height = 100;
     maxV = 0;

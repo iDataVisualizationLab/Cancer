@@ -152,7 +152,7 @@ function getColor(code) {
     }
 }
 function BubbleChart() {
-    var diameter = 600;
+    var diameter = 400;
     var bubble = d3.pack()
         .size([diameter, diameter])
         .padding(1.5);
@@ -218,19 +218,19 @@ function classes(root) {
 
 function ProteinForceDirectedGraph() {
     d3.select("#svgprotein").remove()
-    var width = 1280,
-        height = 1200;
-    var radius=15;
+    var width = 800,
+        height = 900;
+    var radius=4;
     var svg = d3.select("#cancernetwork").append("svg").attr("id","svgprotein").attr("width", width).attr("height", height);
     var simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().distance(100).id(function (d) {
+        .force("link", d3.forceLink().id(function (d) {
             return d.id;
         }))
-        .force("charge", d3.forceManyBody().strength(-20))
+        .force("charge", d3.forceManyBody())
         .force("collide", d3.forceCollide(28).iterations(16))
         .force("center", d3.forceCenter(width / 2, height / 2));
         var arc = d3.arc()
-            .outerRadius(15)
+            .outerRadius(radius)
             .innerRadius(0);
         var pie = d3.pie()
             .sort(null)
@@ -300,6 +300,8 @@ function ProteinForceDirectedGraph() {
             node.attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
+            node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+                .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
         }
 
 
