@@ -41,9 +41,11 @@
     <option value="avgRAS" >Order by P53KO-O-RAS</option>
     <option value="avgWT" >Order by WT</option>
     </select>
+        <input id="showrighPanel" type="checkbox" checked  /><label> Show lowest/highest graphs</label>
         <div id="column1" class="graph">
             <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
            <button onclick="updateChartsDescending(vars[0])">Descending</button>
+
         </div>
         <div id="column2" class="graph">
          <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[1])">Ascending</button>
@@ -92,8 +94,20 @@ function openTab(evt, tabName) {
 }
 </script>
 <script >
-    var test = d3.select("#sPlot");
-    console.log(test)
+    $(document).ready(function () {
+        $('#showrighPanel').change(function(){
+
+            if(this.checked){
+                $(".rightPanel").show();
+            }
+            else{
+                $(".rightPanel").hide();
+            }
+
+        });
+
+
+    })
 </script>
   </body>
 </html>
