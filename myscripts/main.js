@@ -12,7 +12,6 @@ var termsData;
 var finalHighVal=0;
 var finalLowVal = 0;
 var hBCount = 0;
-
 var width =700;
 var height =205;
 
@@ -40,6 +39,7 @@ var bars={};
 //d3.csv("data/data.csv", function(error, data) {
 d3.csv("data/DATA_RKO2.csv", function(error, data) {
     var i = 1;
+
     globalData = data.filter(function(d) {
         d.col1 = +d["P53KO-O1"];
         d.col2 = +d["p53KO-O2"];
@@ -54,16 +54,10 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         d.col8 = +d["WT-O2"];
         d.avgWT = (d.col7+d.col8)/2;
         d.id = i++;
-
-        var diff = 0.75;
-        return  (d.avgP53+d.avgCAS+d.avgRAS+d.avgWT>500)
-            && Math.abs(d[vars[0]])>diff
-            && Math.abs(d[vars[1]])>diff
-            && Math.abs(d[vars[2]])>diff
-            && Math.abs(d[vars[3]])>diff;
+        return  proteinarr.indexOf(d.symbol.toLowerCase())>=0;
     });
-
      svg1 = d3.select("#column1").append("svg")
+         .attr("id","svg1")
         .attr("width", width-10)
         .attr("height", height)
         .append("g")
@@ -138,16 +132,20 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
     barChart(svg4, vars[3]);
 
     scatterPlot();
-
-
-console.log(data);
+    BubbleChart();
+    ProteinForceDirectedGraph();
+    updateProteinTransparent(globalData);
 });
 
-
+var maxV;
+var minV;
+var ProteinScale = d3.scaleLinear()
+    .domain([-7.8, 8.48])
+    .range([5, 30]);
 function barChart(svg, varName) {
     var height = 100;
-    var maxV = 0;
-    var minV = 0;
+    maxV = 0;
+    minV = 0;
     for (var v = 0; v<4;v++){
         var ext = d3.extent(globalData.map(function (d) {
             return +d[vars[v]];
@@ -218,7 +216,7 @@ function barChart(svg, varName) {
         .attr("x", function(d,i){
             return i*stepX;
         })
-        .attr("width", 2)
+        .attr("width", 3)
         .attr("y", function(d){
             if (y(d[varName])>=0)
                 return height - y(d[varName]);
@@ -236,6 +234,12 @@ function barChart(svg, varName) {
         })
         .attr("fill-opacity", 0.7)
         .on('mouseover', function(d,i){
+            var cancerstudies = [];
+            data.children.forEach(function (c) {
+                if(c.protein.indexOf(d.symbol.toUpperCase())>=0){
+                    cancerstudies.push(c.name);
+                }
+            });
             var tipContent = '<p><b>Name: </b>' + d.Name + '</p><table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>';
             tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol + '</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr></table>";
              if(hBCount!=0){
@@ -251,12 +255,26 @@ function barChart(svg, varName) {
 
              addBarChart(d,barsvg);
              hBCount++;
-             var hoverData = d3.select("#hoverBar"); 
-             tipContent = tipContent  + hoverData._groups[0][0].innerHTML;
+             var hoverData = d3.select("#hoverBar");
+             tipContent = tipContent  + hoverData._groups[0][0].innerHTML+"<br><br> Cancer studies: "+ cancerstudies.toString();
+
              tip1.show(tipContent, this);
             d3.select("#hoverBar svg").remove();
-
             mouseOver(i);
+
+            //Process protein
+            var protein = d3.select("#svgprotein").selectAll("g");
+            protein.style("opacity",0.1);
+            d3.selectAll("#"+d.symbol.toUpperCase()).style("opacity",1);
+
+            //process studies
+            var bubble = d3.select("#svgbubble").selectAll(".gnode");
+            bubble.style("opacity",function (b) {
+                if(b.data.protein.indexOf(d.symbol.toUpperCase())==-1) return 0.1;
+                else return 1;
+            })
+
+
         })
         .on('mouseout', function(d){
             tip1.hide();
@@ -424,6 +442,14 @@ function updateChartsAscending(varName){
     });
     globalData.forEach(function (d,i) {
         d.x = i*stepX;
+        globalProtein.nodes.forEach(function (p) {
+            if(d.symbol.toLowerCase()==p.label.toLowerCase()){
+                p.pie.forEach(function (data) {
+                    data.radius=ProteinScale(+d[varName]);
+                })
+
+            }
+        })
     });
     for (var v = 0; v<4;v++) {
         bars[vars[v]].transition().duration(500)
@@ -431,6 +457,8 @@ function updateChartsAscending(varName){
                 return d.x;
             });
     }
+    ProteinForceDirectedGraph();
+    updateProteinTransparent(globalData);
 }
 
 function updateChartsDescending(varName){
@@ -501,10 +529,10 @@ function scatterPlot(){
 
           n = traits.length;
 
-          console.log(traits)
+         // console.log(traits)
      var count = 1;
       traits.forEach(function(trait) {
-        console.log(d3.extent(data, function(d) { return d[trait]; }))
+       // console.log(d3.extent(data, function(d) { return d[trait]; }))
         // domainByTrait[trait] = [finalLowVal, finalHighVal];
         if(count>4)
          domainByTrait[trait] = d3.extent(data, function(d) { return d[trait]; });
@@ -603,6 +631,7 @@ function scatterPlot(){
                  tipContent = tipContent  + hoverData._groups[0][0].innerHTML;
                  tip1.show(tipContent, this);
                 d3.select("#hoverBar svg").remove();
+
             })
             .on('mouseout', function(d){
                 tip1.hide();

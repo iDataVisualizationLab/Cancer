@@ -8,9 +8,23 @@
     <script src="./js/script.js"></script>
     <script src="./js/d3.v4.js"></script>
     <script src="./js/d3.v4.tip.js"></script>
+    <script src="myscripts/kegg.js"></script>
     <script src="myscripts/main.js"></script>
-  <link rel="stylesheet" type="text/css" href="styles/style.css" />
 
+  <link rel="stylesheet" type="text/css" href="styles/style.css" />
+    <style>
+
+        .links line {
+            stroke: #999;
+            stroke-opacity: 0.6;
+        }
+
+        .nodes circle {
+            stroke: #fff;
+            stroke-width: 1.5px;
+        }
+
+    </style>
 <div class="tab">
   <button class="tablinks active" onclick="openTab(event, 'home')">Bar Charts</button>
   <button class="tablinks" onclick="openTab(event, 'sPlot')">Scatter Plot</button>
@@ -74,7 +88,9 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 </script>
-     
-
+<script >
+    var test = d3.select("#sPlot");
+    console.log(test)
+</script>
   </body>
 </html>
