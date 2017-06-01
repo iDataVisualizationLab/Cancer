@@ -12,7 +12,7 @@ var termsData;
 var finalHighVal=0;
 var finalLowVal = 0;
 var hBCount = 0;
-var width =500;
+var width =c;
 var height =180;
 
 
