@@ -14,6 +14,7 @@ var finalLowVal = 0;
 var hBCount = 0;
 var width =500;
 var height =180;
+var minPValue = 0.2;
 
 
 var lineColor = d3.scaleLinear()
@@ -236,7 +237,7 @@ function barChart(svg, varName) {
                 return typeColor(varName);
         })
         .attr("fill-opacity", function(d){
-                return 0.2+d["PValue"+varName]*0.8;
+                return minPValue+d["PValue"+varName]*(1-minPValue);
         })
         .on('mouseover', function(d,i){
            var ul = document.createElement("ul");
@@ -251,8 +252,13 @@ function barChart(svg, varName) {
                     index++;
                 }
             });
-            var tipContent = '<p><b>Name: </b>' + d.Name + '</p><table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>';
-            tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td>' +d.symbol + '</td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' +d.col7+ '</td><td>' +d.col8 + "</td></tr></table>";
+            var tipContent = '<p> Name: ' + d.Name + '</p><table id="tiptable">' + '<tr><td> chr</td><td> start</td><td> end </td><td> strand </td><td> symbol </td><td> length</td><td> P53KO-O1 </td><td> P53KO-O2 </td><td> p53KO-O-CAS1 </td><td>p53KO-O-CAS2</td><td>p53KO-O-RAS1 </td><td>p53KO-O-RAS2 </td><td> WT-O1 </td><td> WT-O2</td>' 
+            + '<td>'+vars[0]+'</td>'
+            + '<td>'+vars[1]+'</td>'
+            + '<td>'+vars[2]+'</td>'
+            + '<td>'+vars[3]+'</td></tr>';
+            tipContent = tipContent + '<tr><td>' + d.chr + "</td>" + '<td>' +d.start + '</td><td>' +d.end + '</td><td>' + d.strand +'</td><td><b>' +d.symbol + '</b></td><td>' +d.length + '</td><td>' + d.col1 + '</td><td>' +d.col2  + '</td><td>' +d.col3 + '</td><td>' +d.col4 + '</td><td>' +d.col5+ '</td><td>' +d.col6+ '</td><td>' 
+                            +d.col7+ '</td><td>' +d.col8 + '</td><td>' +d[vars[0]] + '</td><td>' +d[vars[1]] + '</td><td>' +d[vars[2]] + '</td><td>' +d[vars[3]] + '</td></tr></table>';
              if(hBCount!=0){
                      d3.select("#hoverBar svg").remove();
                      hBCount++;
@@ -412,7 +418,10 @@ function addBarChart(data,barsvg,varIndex,str){
         .attr("fill", function(d,i){
                 return typeColor(vars[i]);
         })
-        .attr("fill-opacity", 0.8);
+        .attr("fill-opacity", function(d,i){
+            var val = minPValue+data["PValue"+vars[i]]*(1-minPValue);
+            return val;
+        });
 
     // add the x axis and x-label
     barsvg.append("g")
