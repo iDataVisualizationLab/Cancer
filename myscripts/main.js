@@ -29,7 +29,7 @@ var typeColor = function(){
 var tip1 = d3.tip()
     .attr('class', 'd3-tip d3-tooltip')
     .direction('e')
-    .offset([0, 120])
+    .offset([0, 20])
     .html(function(d) {
         return d;
         // return '<table id="tiptable">' + '<tr><th> <b>chr</th><th> <b>start</th><th> <b>end</b> </th><th> <b>strand</b> </th><th> <b>symbol</b> </th><th> <b>name</b> </th><th> <b>length</b> </th><th> <b>P53KO-O1</b> </th><th> <b>P53KO-O2</b> </th><th> <b>p53KO-O-CAS1</b> </th><th> <b>p53KO-O-CAS2</b> </th><th> <b>p53KO-O-RAS1</b> </th><th> <b>p53KO-O-RAS2</b> </th><th> <b>WT-O1</b> </th><th> <b>WT-O2</b> </th></tr>' + d + "</table>";
@@ -145,7 +145,7 @@ var maxV;
 var minV;
 var ProteinScale = d3.scaleLinear()
     .domain([-7.8, 8.48])
-    .range([4, 15]);
+    .range([3, 13]);
 function barChart(svg, varName) {
     var height = 100;
     maxV = 0;
@@ -322,6 +322,8 @@ function barChart(svg, varName) {
                 d3.select(selectId)
                     .attr("fill", typeColor(vars[v]));
             }
+             ProteinForceDirectedGraph();
+            updateProteinTransparent(globalData);
         })
 
 
@@ -495,6 +497,8 @@ function updateChartsDescending(varName){
                 return d.x;
             });
     }
+    ProteinForceDirectedGraph();
+    updateProteinTransparent(globalData);
 }
 function updateChartsReset(varName){
     var stepX = (width-50)/globalData.length;

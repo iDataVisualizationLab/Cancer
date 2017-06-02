@@ -7,7 +7,7 @@ d3.json("data/kegg.json", function (error, graph) {
     globalProtein = JSON.parse(JSON.stringify(graph));
     globalProtein.nodes.forEach(function (d) {
         d.pie.forEach(function (e) {
-            e.radius =10;
+            e.radius =7;
         })
     })
 });
@@ -155,11 +155,12 @@ function BubbleChart() {
     var diameter = 400;
     var bubble = d3.pack()
         .size([diameter, diameter])
-        .padding(1.5);
+        .padding(1);
     var svg = d3.select("body").append("div").attr("id","cancernetwork").append("svg")
         .attr("id","svgbubble")
         .attr("width", diameter)
         .attr("height", diameter)
+        .style("background", "#fff")
         .attr("class", "bubble");
     var root = d3.hierarchy(classes(data))
         .sum(function (d) {
@@ -218,16 +219,17 @@ function classes(root) {
 
 function ProteinForceDirectedGraph() {
     d3.select("#svgprotein").remove()
-    var width = 800,
-        height = 900;
-    var radius=4;
-    var svg = d3.select("#cancernetwork").append("svg").attr("id","svgprotein").attr("width", width).attr("height", height);
+    var width = 650,
+        height = 650;
+    var radius=2;
+    var svg = d3.select("#cancernetwork").append("svg").attr("id","svgprotein").attr("width", width).attr("height", height)
+                .style("background", "#fff");
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {
             return d.id;
         }))
         .force("charge", d3.forceManyBody())
-        .force("collide", d3.forceCollide(28).iterations(16))
+        .force("collide", d3.forceCollide(15).iterations(12))
         .force("center", d3.forceCenter(width / 2, height / 2));
         var arc = d3.arc()
             .outerRadius(radius)
@@ -242,15 +244,17 @@ function ProteinForceDirectedGraph() {
             .selectAll("line")
             .data(globalProtein.links)
             .enter().append("line")
-            .attr("stroke-width", 1).attr("stroke","gray");
+            .attr("stroke-width", 0.25)
+            .attr("stroke","black")
+            .attr("stroke-opacity",0.5);
 
         var node = svg.selectAll(".nodes")
             .data(globalProtein.nodes)
             .enter().append("g")
             .attr("class","nodes")
-            .attr("r", 15)
+            .attr("r", 13)
             .attr("id",function (d) {
-                return d.label.toUpperCase();
+                return d.label;
             })
             .call(d3.drag()
                 .on("start", dragstarted)
@@ -268,9 +272,12 @@ function ProteinForceDirectedGraph() {
                 return getColor(d.data.study);
             });
         node.append("text")
-            .attr("dx", 12)
+            .attr("class","texts")
+            .attr("dx", 8)
             .attr("dy", ".35em")
-            .text(function (d) {
+            .attr("font-family", "sans-serif")
+              .attr("font-size", "10px")
+              .text(function (d) {
                 return d.label
             });
 
@@ -348,7 +355,7 @@ function updateProteinTransparent(graph) {
     })
   var finallist=  proteinarr.diff(firstarry);
     var nodes = d3.select("#svgprotein").selectAll(".nodes");
-    nodes.style("opacity",function (d) {
+    nodes.selectAll(".texts").style("opacity",function (d) {
        if(finallist.indexOf(d.label.toLowerCase())==-1)
            return 1;
        else return 0.1;
