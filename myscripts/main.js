@@ -235,7 +235,9 @@ function barChart(svg, varName) {
         .attr("fill", function(d){
                 return typeColor(varName);
         })
-        .attr("fill-opacity", 0.7)
+        .attr("fill-opacity", function(d){
+                return 0.2+d["PValue"+varName]*0.8;
+        })
         .on('mouseover', function(d,i){
            var ul = document.createElement("ul");
            var index=1;
@@ -341,7 +343,7 @@ function barChart(svg, varName) {
 
 function mouseOver(index) {
     for (var v = 0; v < 4; v++) {
-        bars[vars[v]].transition().duration(500)
+        bars[vars[v]].transition().duration(50)
             .attr("stroke", function (d, i) {
                 if (index == i) {
                     return "#000";
