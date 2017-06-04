@@ -24,7 +24,6 @@
   <button class="tablinks active" onclick="openTab(event, 'home')">Bar Charts</button>
   <button class="tablinks" onclick="openTab(event, 'sPlot')">Scatter Plot</button>
 </div>-->
-  <div id="home" class="tabcontent">  
     <div class="charts">
     <select onchange="updateChartsReset(this.value)">
     <option value="Choose" selected="selected">Choose</option>
@@ -33,7 +32,7 @@
     <option value="avgRAS" >Order by P53KO-O-RAS</option>
     <option value="avgWT" >Order by WT</option>
     </select>
-        <input id="showrighPanel" type="checkbox"  /><label> Show lowest/highest graphs</label>
+        <input id="showrighPanel" type="checkbox"  /><label> Show lowest/highest</label>
         <button onclick="location.reload()">Reload page</button>
         <div id="column1" class="graph">
             <button style="margin-left: 10px;" onclick="updateChartsAscending(vars[0])">Ascending</button>
@@ -66,26 +65,9 @@
 
     <div id="multi-plane-representation" style="margin-left: 620px;">
     </div>
-  </div>
   <div id="sPlot" class="tabcontent"></div>
 
 
-<script>
-document.getElementById("home").style.display = "block";
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-</script>
 <script >
     $(document).ready(function () {
         $('#showrighPanel').change(function(){
