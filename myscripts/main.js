@@ -324,9 +324,14 @@ function barChart(svg, varName) {
             }
              ProteinForceDirectedGraph();
             updateProteinTransparent(globalData);
+            var protein = d3.select("#svgprotein").selectAll("g");
+            protein.style("opacity",1);
+
+            //process studies
+            var bubble = d3.select("#svgbubble").selectAll(".gnode");
+            bubble.style("opacity",1)
+
         })
-
-
 
     // add the x axis and x-label
     svg.append("g")

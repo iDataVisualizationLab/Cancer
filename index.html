@@ -17,8 +17,23 @@
             list-style: none;
         }
 
-    
-
+        #svgbubble{
+            position: relative;
+            width: 400px;
+            top:30px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+        #svgprotein{
+            position: relative;
+            top:30px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
     </style>
 <!--<div class="tab">
   <button class="tablinks active" onclick="openTab(event, 'home')">Bar Charts</button>
@@ -66,7 +81,10 @@
     <div id="multi-plane-representation" style="margin-left: 620px;">
     </div>
   <div id="sPlot" class="tabcontent"></div>
-
+<div id="cancernetwork">
+    <div id="bubble"></div>
+    <div id="protein"></div>
+</div>
 
 <script >
     $(document).ready(function () {
@@ -84,5 +102,6 @@
 
     })
 </script>
+
   </body>
 </html>

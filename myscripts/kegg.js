@@ -108,7 +108,6 @@ var data = {
 
 
     },
-
     proteinarr=["camk2a","calml6","pdgfra","pdgfa","elk1","ilk","bax","birc5","rhoa","appl1","casp3","dcc","c00416","rad51","smad2","stat1","jak1","mapk8","pld1","ralbp1","rala","ralgds","arhgef6","flt4","hey1","hes1","fgf1","brca2","tnfsf11","wnt4","fgfr1","nfkb2","lrp6","frat1","csnk1a1l","pgr","c00410","dll3","fos","igf1r","igf1","notch1","jag1","ncoa3","c00951","esr1","hgf","jun","ets1","cdc42","rap1a","pak4","gab1","met","rapgef1","rac1","pdgfb","c00122","epas1","egln2","arnt","slc2a1","alk","pik3ca","rassf5","stk4","tgfa","plcg1","foxo3","c01245","c00165","c00076","prkca","cdkn2b","skp2","traf1","ptgs2","nos2","birc8","lamc3","cycs","ptk2","max","apaf1","cks1b","rarb","c00777","pias2","itga6","itgb1","eif4ebp1","kit","rps6kb1","pim2","pim1","pml","ccna1","jup","stat3","ppard","runx1","cebpa","spi1","flt3","kras","rara","smad3","cblc","crk","gab2","shc2","smad4","stat5a","tgfbr1","tgfbr2","ctbp1","hdac1","tgfb1","abl1","ptpn11","bcl2l1","mecom","rps6ka5","fgfr3","dapk1","rassf1","erbb2","vegfa","cdkn2a","cdk4","nras","hhip","fzd10","dvl1","axin1","apc2","shh","wnt16","bmp2","ptch1","gli1","tfg","ret","cdh1","myc","rxra","braf","pparg","araf","map2k1","mapk1","gstp1","pik3r5","akt3","mtor","hsp90aa1","gsk3b","c05981","grb2","sos1","pdpk1","rb1","egf","ccne1","creb3","casp9","bad","chuk","egfr","tp53","hras","e2f1","ctnnb1","cdk2","foxo1","cdkn1a","mdm2","c16038","c00535","c03917","crebbp","lef1","ccnd1","bcl2","klk3","nkx3-1","pten","cdkn1b","nfkbia","nfkb1","ar"] ,color = d3.scaleOrdinal(d3.schemeCategory20);
 function getColor(code) {
     if (code == 0)
@@ -156,7 +155,7 @@ function BubbleChart() {
     var bubble = d3.pack()
         .size([diameter, diameter])
         .padding(1);
-    var svg = d3.select("body").append("div").attr("id","cancernetwork").append("svg")
+    var svg = d3.select("#bubble").append("svg")
         .attr("id","svgbubble")
         .attr("width", diameter)
         .attr("height", diameter)
@@ -181,7 +180,6 @@ function BubbleChart() {
         .attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
-
     node.append("title")
         .text(function (d) {
             return d.data.className + ": " + d.value;
@@ -219,10 +217,10 @@ function classes(root) {
 
 function ProteinForceDirectedGraph() {
     d3.select("#svgprotein").remove()
-    var width = 650,
+    var width = 800,
         height = 650;
     var radius=2;
-    var svg = d3.select("#cancernetwork").append("svg").attr("id","svgprotein").attr("width", width).attr("height", height)
+    var svg = d3.select("#protein").append("svg").attr("id","svgprotein").attr("width", width).attr("height", height)
                 .style("background", "#fff");
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {
@@ -271,6 +269,19 @@ function ProteinForceDirectedGraph() {
             .style("fill", function (d) {
                 return getColor(d.data.study);
             });
+    node.on("click",function (d) {
+        var bubble= d3.select("#svgbubble").selectAll("g");
+        bubble.style("opacity",function (e) {
+            if(e.data.protein.indexOf(d.label)>=0) return 1;
+            else return 0.1;
+        });
+        var bars = d3.select("#svg1").selectAll("rect");
+        bars.style("fill-opacity",function (bar) {
+            if(bar.symbol.toUpperCase()==d.label) return 1;
+            else return 0.1;
+
+        });
+    })
         node.append("text")
             .attr("class","texts")
             .attr("dx", 8)
@@ -314,17 +325,37 @@ function ProteinForceDirectedGraph() {
 
        var bubble= d3.select("#svgbubble").selectAll("g");
         bubble.on("click",function (b) {
+            var e = d3.event,
+                isSelected = d3.select(this).classed("selected");
+
+            if (!e.ctrlKey && !e.metaKey) {
+                d3.select("#svgbubble").selectAll("g").classed("selected", false);
+            }
+            d3.select(this).classed("selected", !isSelected);
+
+            d3.select("#svgbubble").selectAll("g").style("opacity",0.1)
+            d3.select("#svgbubble").selectAll(".selected").style("opacity",1)
+
+
             node.style("opacity",function (d) {
                 if(b.data.protein.indexOf(d.label)>=0) return 1;
                 else return 0.1;
-            })
+            });
             link.style("opacity",function (d) {
                 if(b.data.protein.indexOf(d.source.label)>=0&&b.data.protein.indexOf(d.target.label)>=0) return 1;
                 else return 0.1;
             })
 
+            var bars = d3.select("#svg1").selectAll("rect");
+            bars.style("fill-opacity",function (bar) {
+                if(b.data.protein.indexOf(bar.symbol.toUpperCase())>=0) return 1;
+                else return 0.1;
 
-        })
+            });
+
+
+
+        });
 
     function dragstarted(d) {
         if (!d3.event.active) simulation.alphaTarget(0.3).restart();
