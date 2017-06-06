@@ -217,7 +217,7 @@ function classes(root) {
 
 function ProteinForceDirectedGraph() {
     d3.select("#svgprotein").remove()
-    var width = 800,
+    var width = 650,
         height = 650;
     var radius=2;
     var svg = d3.select("#protein").append("svg").attr("id","svgprotein").attr("width", width).attr("height", height)
@@ -273,12 +273,12 @@ function ProteinForceDirectedGraph() {
         var bubble= d3.select("#svgbubble").selectAll("g");
         bubble.style("opacity",function (e) {
             if(e.data.protein.indexOf(d.label)>=0) return 1;
-            else return 0.1;
+            else return 0.05;
         });
         var bars = d3.select("#svg1").selectAll("rect");
         bars.style("fill-opacity",function (bar) {
             if(bar.symbol.toUpperCase()==d.label) return 1;
-            else return 0.1;
+            else return 0.05;
 
         });
     })
@@ -318,8 +318,8 @@ function ProteinForceDirectedGraph() {
             node.attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
-            node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
-                .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
+            node.attr("cx", function(d) { return d.x = Math.max(20*radius, Math.min(width - 20*radius, d.x)); })
+                .attr("cy", function(d) { return d.y = Math.max(20*radius, Math.min(height - 20*radius, d.y)); });
         }
 
 
@@ -339,17 +339,17 @@ function ProteinForceDirectedGraph() {
 
             node.style("opacity",function (d) {
                 if(b.data.protein.indexOf(d.label)>=0) return 1;
-                else return 0.1;
+                else return 0.05;
             });
             link.style("opacity",function (d) {
                 if(b.data.protein.indexOf(d.source.label)>=0&&b.data.protein.indexOf(d.target.label)>=0) return 1;
-                else return 0.1;
+                else return 0.05;
             })
 
             var bars = d3.select("#svg1").selectAll("rect");
             bars.style("fill-opacity",function (bar) {
                 if(b.data.protein.indexOf(bar.symbol.toUpperCase())>=0) return 1;
-                else return 0.1;
+                else return 0.05;
 
             });
 
