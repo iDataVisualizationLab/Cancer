@@ -67,16 +67,19 @@ d3.csv("data/DATA_RKO2.csv", function(error, data) {
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
      svg2 = d3.select("#column2").append("svg")
+         .attr("id","svg2")
         .attr("width", width-10)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
      svg3 = d3.select("#column3").append("svg")
+         .attr("id","svg3")
         .attr("width", width-10)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 30 + "," + 0 + ")");
      svg4 = d3.select("#column4").append("svg")
+         .attr("id","svg4")
         .attr("width", width-10)
         .attr("height", height)
         .append("g")
