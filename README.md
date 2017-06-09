@@ -1,6 +1,6 @@
 https://idatavisualizationlab.github.io/Cancer/
 
-Video demo: http://myweb.ttu.edu/vinhtngu/demo/CancerDemo.mp4
+[![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/Thumbnaildemo.png)](http://www.myweb.ttu.edu/vinhtngu/demo/CancerDemo.mp4)
 
 ## Welcome to GitHub Pages
 
